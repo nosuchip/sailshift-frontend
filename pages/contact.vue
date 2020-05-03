@@ -50,10 +50,8 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { namespace } from 'vuex-class';
 import { ValidatableElement } from '~/@typing/generics';
-import mutations, {
-    LoadingMutationType,
-    NotificationMutationType
-} from '~/plugins/mutations';
+import mutations, { LoadingMutationType } from '~/plugins/mutations';
+import actions, { ContactActionType } from '~/plugins/actions';
 import * as api from '~/plugins/api';
 
 const appModule = namespace('app');
@@ -62,13 +60,14 @@ const appModule = namespace('app');
     components: {}
 })
 export default class Contact extends Vue {
-    @appModule.Mutation(mutations.LOADING)
+    @appModule.Mutation(mutations.app.LOADING)
     loading!: LoadingMutationType;
 
-    @appModule.Mutation(mutations.NOTIFICATION)
-    notification!: NotificationMutationType;
+    @appModule.Action(actions.app.CONTACT)
+    contactUs!: ContactActionType;
 
     valid: boolean = true;
+
     email: string = '';
     subject: string = '';
     message: string = '';
@@ -95,15 +94,6 @@ export default class Contact extends Vue {
 
         try {
             await api.contactUs(this.email, this.subject, this.message);
-            this.notification({
-                message: 'Thank you for your message',
-                type: 'success'
-            });
-        } catch (error) {
-            this.notification({
-                message: 'Unable to send message',
-                type: 'error'
-            });
         } finally {
             this.loading(false);
         }

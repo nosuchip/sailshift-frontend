@@ -28,15 +28,19 @@ export const documentMapper = {
 export const userMapper = {
     fromBackend(user: Dictionary): User {
         return {
+            id: user.id,
             email: user.email,
-            name: user.name
+            name: user.name,
+            activatedAt: user.activated_at
         };
     },
 
     toBackend(user: User): Dictionary {
         return {
+            id: user.id,
             email: user.email,
-            name: user.name
+            name: user.name,
+            activated_at: user.activatedAt
         };
     }
 };

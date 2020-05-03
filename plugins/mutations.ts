@@ -1,7 +1,13 @@
 export default {
-    LOGOUT: 'LOGOUT',
-    LOADING: 'LOADING',
-    NOTIFICATION: 'NOTIFICATION'
+    app: {
+        LOADING: 'LOADING',
+        NOTIFICATION: 'NOTIFICATION'
+    },
+
+    user: {
+        LOGIN: 'LOGIN',
+        LOGOUT: 'LOGOUT'
+    }
 };
 
 export interface LoadingMutationType {

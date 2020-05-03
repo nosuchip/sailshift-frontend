@@ -48,13 +48,23 @@ export default {
      */
     modules: [
         '@nuxtjs/pwa',
-        // Doc: https://github.com/nuxt-community/dotenv-module
-        '@nuxtjs/dotenv'
+        '@nuxtjs/dotenv',
+        '@nuxtjs/toast',
+        '@nuxtjs/ngrok'
     ],
-    /*
-     ** vuetify module configuration
-     ** https://github.com/nuxt-community/vuetify-module
-     */
+    toast: {
+        position: 'top-center',
+        register: [
+            // Register custom toasts
+            {
+                name: 'my-error',
+                message: 'Oops...Something went wrong',
+                options: {
+                    type: 'error'
+                }
+            }
+        ]
+    },
     vuetify: {
         customVariables: ['~/assets/variables.scss'],
         theme: {

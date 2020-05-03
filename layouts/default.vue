@@ -75,30 +75,34 @@
     </v-app>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            clipped: false,
-            drawer: false,
-            fixed: false,
-            items: [
-                {
-                    icon: 'mdi-apps',
-                    title: 'Welcome',
-                    to: '/'
-                },
-                {
-                    icon: 'mdi-chart-bubble',
-                    title: 'Inspire',
-                    to: '/inspire'
-                }
-            ],
-            miniVariant: false,
-            right: true,
-            rightDrawer: false,
-            title: 'Vuetify.js'
-        };
-    }
-};
+<script lang="ts">
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Dictionary } from '../@typing/generics';
+import Toasted from '~/mixins/toasted.vue';
+
+@Component({
+    components: {},
+    mixins: [Toasted]
+})
+export default class DefaultLayout extends Vue {
+    clipped: boolean = false;
+    drawer: boolean = false;
+    fixed: boolean = false;
+    miniVariant: boolean = false;
+    right: boolean = true;
+    rightDrawer: boolean = false;
+    items: Dictionary[] = [
+        {
+            icon: 'mdi-apps',
+            title: 'Welcome',
+            to: '/'
+        },
+        {
+            icon: 'mdi-chart-bubble',
+            title: 'Inspire',
+            to: '/inspire'
+        }
+    ];
+}
 </script>

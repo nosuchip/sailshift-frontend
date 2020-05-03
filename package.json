@@ -24,13 +24,16 @@
     "@nuxt/typescript-runtime": "^0.4.0",
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/pwa": "^3.0.0-0",
+    "@nuxtjs/toast": "^3.3.0",
     "axios": "^0.19.2",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "vue-property-decorator": "^8.4.2"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^0.6.6",
     "@nuxtjs/eslint-config-typescript": "^1.0.0",
     "@nuxtjs/eslint-module": "^1.0.0",
+    "@nuxtjs/ngrok": "^1.2.8",
     "@nuxtjs/stylelint-module": "^3.1.0",
     "@nuxtjs/vuetify": "^1.0.0",
     "@types/axios": "^0.14.0",

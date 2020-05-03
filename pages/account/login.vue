@@ -25,9 +25,30 @@
                             type="password"
                             required
                         ></v-text-field>
-                        <v-btn type="submit" color="primary">
-                            Login
-                        </v-btn>
+
+                        <v-row>
+                            <v-col class="text-right pt-0">
+                                <nuxt-link
+                                    to="/account/forgot-password"
+                                    class="no-underline small"
+                                    >Forgot password?</nuxt-link
+                                >
+                            </v-col>
+                        </v-row>
+
+                        <v-row class="align-center">
+                            <v-col class="pt-0 pb-0">
+                                <v-btn type="submit" color="primary">
+                                    Login
+                                </v-btn>
+                                <span class="separator pl-4 pr-4"> OR </span>
+                                <nuxt-link
+                                    to="/account/register"
+                                    class="no-underline"
+                                    >Register</nuxt-link
+                                >
+                            </v-col>
+                        </v-row>
                     </v-form>
                 </v-card-text>
             </v-card>
@@ -35,35 +56,41 @@
     </v-row>
 </template>
 
+<style lang="scss" scoped>
+.no-underline {
+    text-decoration: none;
+}
+
+.small {
+    font-size: 75%;
+}
+</style>
+
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { namespace } from 'vuex-class';
 import { ValidatableElement } from '~/@typing/generics';
-import mutations, {
-    LoadingMutationType,
-    NotificationMutationType
-} from '~/plugins/mutations';
+import mutations, { LoadingMutationType } from '~/plugins/mutations';
 import actions, { LoginActionType } from '~/plugins/actions';
 
 const appModule = namespace('app');
 const userModule = namespace('user');
 
 @Component({
+    layout: 'account',
     components: {}
 })
 export default class Contact extends Vue {
-    @appModule.Mutation(mutations.LOADING)
+    @appModule.Mutation(mutations.app.LOADING)
     loading!: LoadingMutationType;
 
-    @appModule.Mutation(mutations.NOTIFICATION)
-    notification!: NotificationMutationType;
-
-    @userModule.Action(actions.LOGIN)
+    @userModule.Action(actions.user.LOGIN)
     login!: LoginActionType;
 
     email: string = '';
     password: string = '';
+    valid = true;
 
     get form(): ValidatableElement {
         return this.$refs.form as ValidatableElement;
@@ -76,17 +103,7 @@ export default class Contact extends Vue {
 
         this.loading(true);
         try {
-            this.login({ email: this.email, password: this.password });
-            const res = await this.login({
-                email: this.email,
-                password: this.password
-            });
-            console.log('login res:', res);
-        } catch (error) {
-            this.notification({
-                message: 'Unable to send message',
-                type: 'error'
-            });
+            await this.login({ email: this.email, password: this.password });
         } finally {
             this.loading(false);
         }
