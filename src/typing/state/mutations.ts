@@ -7,8 +7,12 @@ export interface LoadingMutationType {
   (loading: boolean): void;
 }
 
+export interface LogoutMutationType {
+  (): void;
+}
+
 export interface NotificationMutationType {
-  (notification: Notification): void;
+  (notification: Notification | null): void;
 }
 
 export interface UserMutationType {

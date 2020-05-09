@@ -55,7 +55,7 @@ export const routes = {
   }
 };
 
-const routesDefinition: RouteConfig[] = [
+export const routesDefinition: RouteConfig[] = [
   {
     path: "/",
     name: routes.home,
@@ -168,15 +168,17 @@ const routesDefinition: RouteConfig[] = [
   { path: "*", component: PageNotFound }
 ];
 
-const userRoutes = [
-  routes.documents.purchaseDocument,
-  routes.documents.purchases
-];
+export const routesAcl = {
+  userRoutes: [
+    routes.documents.purchaseDocument,
+    routes.documents.purchases
+  ],
 
-const adminOnlyRoutes = [
-  routes.admin.listUsers,
-  routes.admin.listDocuments
-];
+  adminOnlyRoutes: [
+    routes.admin.listUsers,
+    routes.admin.listDocuments
+  ]
+};
 
 const router = new VueRouter({
   mode: "history",
@@ -185,11 +187,11 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (adminOnlyRoutes.includes(to.name as string)) {
+  if (routesAcl.adminOnlyRoutes.includes(to.name as string)) {
     if (!store.getters.isLoggedOn || !store.getters.isAdmin) {
       return next({ name: routes.account.login });
     }
-  } else if (userRoutes.includes(to.name as string)) {
+  } else if (routesAcl.userRoutes.includes(to.name as string)) {
     if (!store.getters.isLoggedOn && to.name !== routes.account.login) {
       return next({ name: routes.account.login });
     }

@@ -11,11 +11,9 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import Toasted from "@/mixins/Toasted.vue";
 
 @Component({
-  components: {},
-  mixins: [Toasted]
+  components: {}
 })
 export default class AccountLayout extends Vue {}
 </script>

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex, { MutationPayload } from "vuex";
 import { State } from "@/typing/state/state";
+import createPersistedState from "vuex-persistedstate";
 
 import actionsHandlers from "./actions";
 import mutationsHandlers from "./mutations";
@@ -8,10 +9,10 @@ import * as api from "@/plugins/api";
 
 Vue.use(Vuex);
 
-interface Getters {
-  isLoggedOn: (state: State) => boolean;
-  isAdmin: (state: State) => boolean;
-}
+// interface Getters {
+//   isLoggedOn: (state: State) => boolean;
+//   isAdmin: (state: State) => boolean;
+// }
 
 export const store = new Vuex.Store<State>({
   state: {
@@ -21,11 +22,22 @@ export const store = new Vuex.Store<State>({
     user: null,
     token: null,
 
-    documents: [],
+    documents: {
+      data: [],
+      pagination: {}
+    },
     currentDocument: null,
 
-    purchases: [],
-    currentPurchase: null
+    purchases: {
+      data: [],
+      pagination: {}
+    },
+    currentPurchase: null,
+
+    users: {
+      data: [],
+      pagination: {}
+    }
   },
 
   getters: {
@@ -34,23 +46,24 @@ export const store = new Vuex.Store<State>({
   },
 
   mutations: mutationsHandlers,
-  actions: actionsHandlers
+  actions: actionsHandlers,
 
-  // plugins: [createPersistedState({
-  //   paths: [
-  //     "locale",
-  //     "authToken"
-  //     // 'currentAttempt',
-  //     // 'currentTest',
-  //     // 'currentQuestion',
-  //     // 'questionsChunks',
-  //     // 'isFinished',
-  //     // 'isStarted'
-  //   ]
-  // })]
+  plugins: [createPersistedState({
+    paths: [
+      "token",
+      "user"
+    ]
+  })]
 });
 
 store.subscribe((mutation: MutationPayload, state: State) => {
-    api.setToken(state.token);
-  }
+  api.setToken(state.token);
+});
+
+export const getEmptyDocument = () => ({
+  id: "",
+  title: "",
+  organization: "",
+  description: "",
+  text: ""
 });

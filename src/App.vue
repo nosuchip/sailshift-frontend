@@ -6,7 +6,7 @@
 
     <v-snackbar v-model="notification" v-if="notification">
       {{ notification.message }}
-      <v-btn :color="notification.type" text @click="toggleNotification({ visible: false })">Close</v-btn>
+      <v-btn :color="notification.type" text @click="setNotification(null)">Close</v-btn>
     </v-snackbar>
 
     <loader></loader>
@@ -18,12 +18,12 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-// import HeaderNavBar from "./components/HeaderNavBar.vue";
 import AppFooter from "./components/Footer.vue";
 import Loader from "./components/Loader.vue";
 import { State, Mutation, Action } from "vuex-class";
 import { mutations, actions } from "./plugins/store";
 import { detectLocale } from "./utils/locale";
+import { NotificationActionType } from "./typing/state/actions";
 
 @Component({
   components: {
@@ -34,7 +34,18 @@ import { detectLocale } from "./utils/locale";
 })
 export default class Application extends Vue {
   @State("notification")
-  readonly notification!: Notification;
+  readonly notif!: Notification;
+
+  @Action(actions.NOTIFICATION)
+  setNotification!: NotificationActionType;
+
+  get notification () {
+    return this.notif;
+  }
+
+  set notification (value) {
+    this.setNotification(value);
+  }
 
   // @State("locale")
   // readonly locale!: string;

@@ -2,6 +2,7 @@ import { User } from "../user";
 import { Document } from "../document";
 import { Purchase } from "../purchase";
 import { Notification } from "../notification";
+import { PaginatedApiResult } from "../paginations";
 
 export interface State {
   loading: boolean;
@@ -10,9 +11,11 @@ export interface State {
   user: User | null;
   token: string | null;
 
-  documents: Document[];
+  documents: PaginatedApiResult<Document>;
   currentDocument: Document | null;
 
-  purchases: Purchase[];
+  purchases: PaginatedApiResult<Purchase>;
   currentPurchase: Purchase | null;
+
+  users: PaginatedApiResult<User>;
 }

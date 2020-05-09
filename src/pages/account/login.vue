@@ -74,6 +74,7 @@ import { ValidatableElement } from "@/typing/generics";
 import { mutations, actions } from "@/plugins/store";
 import { LoadingMutationType } from "@/typing/state/mutations";
 import { LoginActionType } from "@/typing/state/actions";
+import { routes } from "@/plugins/router";
 
 @Component({
   components: {}
@@ -100,7 +101,11 @@ export default class Contact extends Vue {
 
       this.loading(true);
       try {
-        await this.login({ email: this.email, password: this.password });
+        const user = await this.login({ email: this.email, password: this.password });
+
+        if (user) {
+          this.$router.push({ name: routes.home });
+        }
       } finally {
         this.loading(false);
       }

@@ -4,22 +4,8 @@ import { Purchase } from "@/typing/purchase";
 import { State } from "@/typing/state";
 import { Notification } from "@/typing/notification";
 
-export const mutations = {
-  LOADING: "LOADING",
-  NOTIFICATION: "NOTIFICATION",
-
-  LOGIN: "LOGIN",
-  LOGOUT: "LOGOUT",
-
-  USER: "USER",
-  TOKEN: "TOKEN",
-
-  DOCUMENTS: "DOCUMENTS",
-  CURRENT_DOCUMENT: "CURRENT_DOCUMENT",
-
-  PURCHASES: "PURCHASES",
-  CURRENT_PURCHASE: "CURRENT_PURCHASE"
-};
+import { mutations } from "./types";
+import { PaginatedApiResult } from "@/typing/paginations";
 
 export default {
   [mutations.LOADING]: (state: State, loading: boolean) => {
@@ -48,19 +34,23 @@ export default {
     state.token = token;
   },
 
-  [mutations.DOCUMENTS]: (state: State, { documents }: { documents: Document[] }) => {
-    state.documents = documents;
+  [mutations.DOCUMENTS]: (state: State, payload: PaginatedApiResult<Document>) => {
+    state.documents = payload;
   },
 
   [mutations.CURRENT_DOCUMENT]: (state: State, { document }: { document: Document | null }) => {
     state.currentDocument = document;
   },
 
-  [mutations.PURCHASES]: (state: State, { purchases }: { purchases: Purchase[] }) => {
-    state.purchases = purchases;
+  [mutations.PURCHASES]: (state: State, payload: PaginatedApiResult<Purchase>) => {
+    state.purchases = payload;
   },
 
   [mutations.CURRENT_PURCHASE]: (state: State, { purchase }: { purchase: Purchase | null }) => {
     state.currentPurchase = purchase;
+  },
+
+  [mutations.USERS]: (state: State, payload: PaginatedApiResult<User>) => {
+    state.users = payload;
   }
 };
