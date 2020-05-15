@@ -121,7 +121,7 @@ import {
   DocumentCreateActionType,
   DocumentUpdateActionType,
   DocumentDeleteActionType,
-  DocumentLoadActionType
+  DocumentsLoadActionType
 } from "@/typing/state/actions";
 import AsyncOpsControl from "@/mixins/async-ops-control.vue";
 
@@ -142,7 +142,7 @@ export default class ListDocuments extends Mixins(AsyncOpsControl) {
   deleteDocument!: DocumentDeleteActionType;
 
   @Action(actions.LOAD_DOCUMENTS)
-  loadDocuments!: DocumentLoadActionType;
+  loadDocuments!: DocumentsLoadActionType;
 
   defaultHeader = { text: "", sortable: false, filterable: false }
 

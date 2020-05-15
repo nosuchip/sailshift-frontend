@@ -73,7 +73,7 @@ export interface DocumentDeleteActionType {
   (document: Document): void;
 }
 
-export interface DocumentLoadActionType {
+export interface DocumentsLoadActionType {
   (pagination?: Pagination): PaginatedApiResult<Document>;
 }
 
@@ -83,4 +83,8 @@ export interface DocumentSearchActionType {
 
 export interface LoadPopularDocumentsType {
   (): Document[];
+}
+
+export interface DocumentLoadActionType {
+  (documentId: string): Document;
 }

@@ -138,10 +138,22 @@ const searchDocuments = async ({ dispatch, commit }: ActionParam, filters: Filte
 const loadPopularDocuments = async ({ commit, dispatch }: ActionParam) => {
   try {
     const { data } = await api.getPopularDocuments();
-    commit(mutations.POPULAR_DOCUMENTS, { documents: data.documents });
+    commit(mutations.POPULAR_DOCUMENTS, { documents: data.data });
   } catch (error) {
     dispatch(actions.NOTIFICATION, {
       message: "Unable to load most popular documents.",
+      type: "error"
+    });
+  }
+};
+
+const loadDocument = async ({ commit, dispatch }: ActionParam, documentId: string) => {
+  try {
+    const { data } = await api.loadDocument(documentId);
+    commit(mutations.CURRENT_DOCUMENT, { document: data.document });
+  } catch (error) {
+    dispatch(actions.NOTIFICATION, {
+      message: "Unable to load most requested document.",
       type: "error"
     });
   }
@@ -248,6 +260,7 @@ export default {
   [actions.LOAD_DOCUMENTS]: loadDocuments,
   [actions.SEARCH_DOCUMENTS]: searchDocuments,
   [actions.DOCUMENTS_LOAD_POPULAR]: loadPopularDocuments,
+  [actions.LOAD_DOCUMENT]: loadDocument,
 
   [actions.ADMIN_LOAD_USERS]: adminLoadUsers,
   [actions.ADMIN_LOAD_PURCHASES]: adminLoadPurchases,

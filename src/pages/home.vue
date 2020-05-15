@@ -21,24 +21,7 @@
         </v-col>
       </v-row>
 
-      <v-row class="popular">
-        <v-col>
-          <v-row>
-            <v-col>
-              <h3 class="headline text-center">Top documents</h3>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col v-for="(document, index) in popularDocuments" :key="index">
-              <document-card
-                :document="document"
-                :showPurchase="false"
-              />
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
+      <top-purchases title="Top documents" />
     </v-col>
   </v-row>
 </template>
@@ -52,27 +35,13 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { State, Action } from "vuex-class";
-import { actions } from "@/plugins/store";
-import { LoadPopularDocumentsType } from "@/typing/state/actions";
-import { Document } from "@/typing/document";
-import DocumentCard from "@/components/DocumentCard.vue";
+import TopPurchases from "@/components/TopPurchases.vue";
 
 @Component({
-  components: { DocumentCard }
+  components: { TopPurchases }
 })
 export default class Home extends Vue {
-  @State("popularDocuments")
-  popularDocuments!: Document[];
-
-  @Action(actions.DOCUMENTS_LOAD_POPULAR)
-  loadPopularDocuments!: LoadPopularDocumentsType;
-
   query: string = "";
-
-  mounted () {
-    this.loadPopularDocuments();
-  }
 
   search () {
     this.$router.push({ name: "document.search", query: { query: this.query } });

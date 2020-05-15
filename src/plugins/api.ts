@@ -140,3 +140,7 @@ export const loadPurchases = async (pagination: Pagination): Promise<ApiResponse
 export const getPopularDocuments = async () => {
   return instance.get("/api/documents/popular");
 };
+
+export const loadDocument = async (documentId: string): Promise<AxiosResponse<{ document: Document }>> => {
+  return instance.get(`/api/documents/${documentId}`);
+};
