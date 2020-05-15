@@ -1,5 +1,6 @@
 <template>
-    <v-app dark>
+    <v-app light>
+<!--
         <v-navigation-drawer
             v-model="drawer"
             :mini-variant="miniVariant"
@@ -24,20 +25,23 @@
                 </v-list-item>
             </v-list>
         </v-navigation-drawer>
+-->
         <v-app-bar :clipped-left="clipped" fixed app>
-            <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-            <v-toolbar-title v-text="title" />
-            <v-spacer />
-            <account-button />
+          <img
+            :src="logo"
+            :alt="title"
+            :style="{ height: '48px', width: '48px', marginRight: '16px', borderRadius: '5px' }"
+          />
+          <v-toolbar-title>
+              <h1 class="display-3">{{ title }}</h1>
+          </v-toolbar-title>
+
+          <v-spacer />
+          <account-button />
         </v-app-bar>
         <v-content>
-            <v-container fluid class="fill-height">
-                <router-view></router-view>
-            </v-container>
+            <router-view></router-view>
         </v-content>
-        <v-footer app>
-            <span>&copy; {{ new Date().getFullYear() }}</span>
-        </v-footer>
     </v-app>
 </template>
 
@@ -47,6 +51,8 @@ import Component from "vue-class-component";
 import { Dictionary } from "@/typing/generics";
 import AccountButton from "@/components/AccountButton.vue";
 
+const logo = require("@/assets/img/logo.png");
+
 @Component({
   components: { AccountButton }
 })
@@ -55,6 +61,7 @@ export default class DefaultLayout extends Vue {
     miniVariant: boolean = false;
     clipped: boolean = false;
     title: string = "Sailshift";
+    logo: any = logo;
 
     items: Dictionary[] = [
       {

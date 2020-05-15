@@ -1,6 +1,7 @@
 import { User } from "../user";
 import { Document } from "../document";
 import { Pagination, PaginatedApiResult } from "../paginations";
+import { Dictionary } from "../generics";
 
 export interface NotificationActionType {
   (notification: Notification | null): void;
@@ -72,6 +73,14 @@ export interface DocumentDeleteActionType {
   (document: Document): void;
 }
 
-export interface DocumentloadActionType {
-  (pagination: Pagination): PaginatedApiResult<Document>;
+export interface DocumentLoadActionType {
+  (pagination?: Pagination): PaginatedApiResult<Document>;
+}
+
+export interface DocumentSearchActionType {
+  (filters: Dictionary, pagination?: Pagination): PaginatedApiResult<Document>;
+}
+
+export interface LoadPopularDocumentsType {
+  (): Document[];
 }

@@ -22,22 +22,15 @@ export const store = new Vuex.Store<State>({
     user: null,
     token: null,
 
-    documents: {
-      data: [],
-      pagination: {}
-    },
+    documents: [],
     currentDocument: null,
 
-    purchases: {
-      data: [],
-      pagination: {}
-    },
+    popularDocuments: [],
+
+    purchases: [],
     currentPurchase: null,
 
-    users: {
-      data: [],
-      pagination: {}
-    }
+    users: []
   },
 
   getters: {

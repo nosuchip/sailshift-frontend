@@ -7,7 +7,13 @@ export interface Pagination {
   sortValue?: string;
 }
 
+export interface PaginatedResponse {
+  page: number;
+  pages: number;
+  total: number
+}
+
 export interface PaginatedApiResult<T> {
-  pagination: Pagination;
+  pagination: PaginatedResponse;
   data: T[]
 }

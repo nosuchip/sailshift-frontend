@@ -5,7 +5,6 @@ import { State } from "@/typing/state";
 import { Notification } from "@/typing/notification";
 
 import { mutations } from "./types";
-import { PaginatedApiResult } from "@/typing/paginations";
 
 export default {
   [mutations.LOADING]: (state: State, loading: boolean) => {
@@ -34,23 +33,27 @@ export default {
     state.token = token;
   },
 
-  [mutations.DOCUMENTS]: (state: State, payload: PaginatedApiResult<Document>) => {
-    state.documents = payload;
+  [mutations.DOCUMENTS]: (state: State, { documents }: { documents: Document[] }) => {
+    state.documents = documents;
   },
 
   [mutations.CURRENT_DOCUMENT]: (state: State, { document }: { document: Document | null }) => {
     state.currentDocument = document;
   },
 
-  [mutations.PURCHASES]: (state: State, payload: PaginatedApiResult<Purchase>) => {
-    state.purchases = payload;
+  [mutations.PURCHASES]: (state: State, { purchases }: { purchases: Purchase[] }) => {
+    state.purchases = purchases;
   },
 
   [mutations.CURRENT_PURCHASE]: (state: State, { purchase }: { purchase: Purchase | null }) => {
     state.currentPurchase = purchase;
   },
 
-  [mutations.USERS]: (state: State, payload: PaginatedApiResult<User>) => {
-    state.users = payload;
+  [mutations.USERS]: (state: State, { users }: { users: User[] }) => {
+    state.users = users;
+  },
+
+  [mutations.POPULAR_DOCUMENTS]: (state: State, { documents }: { documents: Document[] }) => {
+    state.popularDocuments = documents;
   }
 };

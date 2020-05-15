@@ -3,6 +3,10 @@ import { Pagination, PaginatedApiResult } from "@/typing/paginations";
 import { User } from "@/typing/user";
 import { Document } from "@/typing/document";
 import { Purchase } from "@/typing/purchase";
+import { Dictionary } from "@/typing/generics";
+import { Filters } from "@/typing/search";
+
+const DEFAULT_DOCUMENT_EXPIRATION_TIME_SEC = 10 * 60;
 
 export const instance = axios.create({
   baseURL: "http://localhost:5000"
@@ -56,16 +60,10 @@ export const resetPassword = async (
   });
 };
 
-export const loadDocuments = async (pagination: Pagination) => {
+type ApiResponse<T> = AxiosResponse<PaginatedApiResult<T>>;
+
+export const loadDocuments = async (pagination: Pagination): Promise<ApiResponse<Document>> => {
   return instance.get("/api/documents/", { params: pagination });
-};
-
-export const loadUsers = async (pagination: Pagination): Promise<PaginatedApiResult<User>> => {
-  return instance.get("/api/users/");
-};
-
-export const loadPurchases = async (pagination: Pagination): Promise<PaginatedApiResult<Purchase>> => {
-  return instance.get("/api/purchases/");
 };
 
 export const adminCreateDocument = async (title: string, organization: string, description: string, file: File) => {
@@ -80,6 +78,65 @@ export const adminCreateDocument = async (title: string, organization: string, d
   } });
 };
 
-export const adminDeleteDocument = async (document: Document) => {
-  return instance.delete(`/api/documents/admin/${document.id}`);
+export const adminPrerenderDocument = async (documentId: string) => {
+  return instance.post(`/api/documents/admin/prerender/${documentId}`);
+};
+
+export const adminDeleteDocument = async (documentId: string) => {
+  return instance.delete(`/api/documents/admin/${documentId}`);
+};
+
+export const adminUpdateDocument = async (document: Document) => {
+  return instance.put(`/api/documents/admin/${document.id}`, document);
+};
+
+export const adminCreateDownloadLink = async (documentId: string, expiresIn: number | null = null) => {
+  const params: Dictionary = {};
+
+  if (expiresIn) params.expires_in = expiresIn;
+
+  return instance.get(`/api/documents/admin/donwload/${documentId}`, { params });
+};
+
+export const adminGrantAccess = async (
+  documentId: string,
+  userId: string,
+  expiresIn: number = DEFAULT_DOCUMENT_EXPIRATION_TIME_SEC,
+  notifyUser: boolean = true
+) => {
+  const payload = {
+    document_id: documentId,
+    user_id: userId,
+    expires_in: expiresIn,
+    notify_user: !!notifyUser
+  };
+  return instance.post("/api/documents/admin/grant", payload);
+};
+
+export const getDocument = async (documentId: Document): Promise<Document> => {
+  return instance.get(`/api/documents/${documentId}`);
+};
+
+export const getActualDocument = async (): Promise<ApiResponse<Document>> => {
+  return instance.get("/api/documents/my");
+};
+
+export const getPastDocument = async (): Promise<ApiResponse<Document>> => {
+  return instance.get("/api/documents/admin/rerender");
+};
+
+export const searchDocuments = async (filters: Filters, pagination: Pagination): Promise<ApiResponse<Document>> => {
+  return instance.post("/api/documents/search", { ...pagination, ...filters });
+};
+
+export const loadUsers = async (pagination: Pagination): Promise<ApiResponse<User>> => {
+  return instance.get("/api/users/", { params: pagination });
+};
+
+export const loadPurchases = async (pagination: Pagination): Promise<ApiResponse<Purchase>> => {
+  return instance.get("/api/purchases/", { params: pagination });
+};
+
+export const getPopularDocuments = async () => {
+  return instance.get("/api/documents/popular");
 };

@@ -1,108 +1,110 @@
 <template>
-      <v-data-table
-        :headers="headers"
-        :items="documents.data"
-        sort-by="calories"
-        class="elevation-1 fill-height flex-grow-1"
-      >
-        <template v-slot:top>
-          <v-toolbar flat color="white">
-            <v-toolbar-title>Documents</v-toolbar-title>
-            <v-divider
-              class="mx-4"
-              inset
-              vertical
-            ></v-divider>
-            <v-spacer></v-spacer>
-            <v-btn outlined color="secondary" dark @click="handleCreate">New Item</v-btn>
+  <v-container fluid class="fill-height white">
+    <v-data-table
+      :headers="headers"
+      :items="documents"
+      sort-by="calories"
+      class="elevation-1 fill-height flex-grow-1"
+    >
+      <template v-slot:top>
+        <v-toolbar flat color="white">
+          <v-toolbar-title>Documents</v-toolbar-title>
+          <v-divider
+            class="mx-4"
+            inset
+            vertical
+          ></v-divider>
+          <v-spacer></v-spacer>
+          <v-btn outlined color="secondary" dark @click="handleCreate">New Item</v-btn>
 
-            <v-dialog v-model="dialog" max-width="800px">
-              <v-card>
-                <v-card-title>
-                  <span class="headline">{{ formTitle }}</span>
-                </v-card-title>
+          <v-dialog v-model="dialog" max-width="800px">
+            <v-card>
+              <v-card-title>
+                <span class="headline">{{ formTitle }}</span>
+              </v-card-title>
 
-                <v-card-text v-if="currentDocument">
-                  <v-container>
-                    <v-row>
-                      <v-col>
-                        <v-file-input
-                          v-if="!currentDocument.id"
-                          v-model="file"
-                          dense
-                          chips
-                          show-size
-                          label="Document to upload"
-                          accept="application/pdf"
-                        ></v-file-input>
+              <v-card-text v-if="currentDocument">
+                <v-container>
+                  <v-row>
+                    <v-col>
+                      <v-file-input
+                        v-if="!currentDocument.id"
+                        v-model="file"
+                        dense
+                        chips
+                        show-size
+                        label="Document to upload"
+                        accept="application/pdf"
+                      ></v-file-input>
 
-                        <v-text-field
-                          v-else
-                          disabled
-                          label="Uploaded document URL"
-                          :value="currentDocument.url"
-                        />
-                      </v-col>
-                    </v-row>
+                      <v-text-field
+                        v-else
+                        disabled
+                        label="Uploaded document URL"
+                        :value="currentDocument.url"
+                      />
+                    </v-col>
+                  </v-row>
 
-                    <v-row>
-                      <v-col cols="12" sm="6">
-                        <v-text-field dense v-model="currentDocument.title" label="Title"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6">
-                        <v-text-field dense v-model="currentDocument.organization" label="Organization"></v-text-field>
-                      </v-col>
-                    </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <v-text-field dense v-model="currentDocument.title" label="Title"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-text-field dense v-model="currentDocument.organization" label="Organization"></v-text-field>
+                    </v-col>
+                  </v-row>
 
-                    <v-row>
-                      <v-col cols="12">
-                        <v-text-field dense v-model="currentDocument.description" label="Description"></v-text-field>
-                      </v-col>
-                    </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field dense v-model="currentDocument.description" label="Description"></v-text-field>
+                    </v-col>
+                  </v-row>
 
-                    <v-row>
-                      <v-col cols="12">
-                        <v-textarea
-                          dense
-                          v-model="currentDocument.text"
-                          label="Parsed file text excerpts (about first page)"
-                          :disabled="!currentDocument.id"
-                        ></v-textarea>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-textarea
+                        dense
+                        v-model="currentDocument.text"
+                        label="Parsed file text excerpts (about first page)"
+                        :disabled="!currentDocument.id"
+                      ></v-textarea>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
 
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
-                  <v-btn color="blue darken-1" text @click="handleSave">Save</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-toolbar>
-        </template>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="handleSave">Save</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
+      </template>
 
-        <template v-slot:item.actions="{ item }">
-          <v-icon
-            small
-            class="mr-2"
-            @click="handleEdit(item)"
-          >
-            mdi-pencil
-          </v-icon>
-          <v-icon
-            small
-            @click="handleDelete(item)"
-          >
-            mdi-delete
-          </v-icon>
-        </template>
+      <template v-slot:item.actions="{ item }">
+        <v-icon
+          small
+          class="mr-2"
+          @click="handleEdit(item)"
+        >
+          mdi-pencil
+        </v-icon>
+        <v-icon
+          small
+          @click="handleDelete(item)"
+        >
+          mdi-delete
+        </v-icon>
+      </template>
 
-        <template v-slot:no-data>
-          Loading data...
-        </template>
-      </v-data-table>
+      <template v-slot:no-data>
+        Loading data...
+      </template>
+    </v-data-table>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -110,7 +112,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { State, Mutation, Action } from "vuex-class";
 import { mutations, actions } from "@/plugins/store";
-import { PaginatedApiResult } from "@/typing/paginations";
+import { Pagination } from "@/typing/paginations";
 import { Watch, Mixins } from "vue-property-decorator";
 import { CurrentDocumentMutationType, LoadingMutationType } from "@/typing/state/mutations";
 import { Document } from "@/typing/document";
@@ -119,14 +121,16 @@ import {
   DocumentCreateActionType,
   DocumentUpdateActionType,
   DocumentDeleteActionType,
-  DocumentloadActionType
+  DocumentLoadActionType
 } from "@/typing/state/actions";
 import AsyncOpsControl from "@/mixins/async-ops-control.vue";
 
 @Component({})
 export default class ListDocuments extends Mixins(AsyncOpsControl) {
+  pagination: Pagination = { page: 0 }
+
   @State("documents")
-  documents!: PaginatedApiResult<Document>
+  documents!: Document
 
   @Action(actions.ADMIN_CREATE_DOCUMENT)
   createDocument!: DocumentCreateActionType;
@@ -137,8 +141,8 @@ export default class ListDocuments extends Mixins(AsyncOpsControl) {
   @Action(actions.ADMIN_DELETE_DOCUMENT)
   deleteDocument!: DocumentDeleteActionType;
 
-  @Action(actions.ADMIN_LOAD_DOCUMENTS)
-  loadDocuments!: DocumentloadActionType;
+  @Action(actions.LOAD_DOCUMENTS)
+  loadDocuments!: DocumentLoadActionType;
 
   defaultHeader = { text: "", sortable: false, filterable: false }
 

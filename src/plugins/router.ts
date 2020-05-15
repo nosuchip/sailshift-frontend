@@ -6,7 +6,7 @@ import _get from "lodash.get";
 import DefaultLayout from "@/layouts/default.vue";
 import AccountLayout from "@/layouts/account.vue";
 
-import Home from "@/pages/index.vue";
+import Home from "@/pages/home.vue";
 
 import Login from "@/pages/account/login.vue";
 import Register from "@/pages/account/register.vue";
@@ -58,9 +58,17 @@ export const routes = {
 export const routesDefinition: RouteConfig[] = [
   {
     path: "/",
-    name: routes.home,
-    component: Home,
-    meta: { title: "Sailshift :: Home" }
+    redirect: "/home",
+    component: DefaultLayout,
+    props: true,
+    children: [
+      {
+        path: "home",
+        name: routes.home,
+        component: Home,
+        meta: { title: "Sailshift :: Home" }
+      }
+    ]
   },
 
   {
@@ -111,21 +119,22 @@ export const routesDefinition: RouteConfig[] = [
 
   {
     path: "/document",
+    redirect: "/home",
     component: DefaultLayout,
     children: [
-      {
-        path: ":documentId",
-        name: routes.documents.document,
-        component: PreviewDocument,
-        props: true,
-        meta: { title: "Sailshift :: Document Preview" }
-      },
       {
         path: "search",
         name: routes.documents.search,
         component: SearchDocument,
         props: true,
         meta: { title: "Sailshift :: Search" }
+      },
+      {
+        path: "purchases",
+        name: routes.documents.purchases,
+        component: Purchases,
+        props: true,
+        meta: { title: "Sailshift :: My purchases" }
       },
       {
         path: "purchase/:documentId",
@@ -135,11 +144,11 @@ export const routesDefinition: RouteConfig[] = [
         meta: { title: "Sailshift :: Purchase" }
       },
       {
-        path: "purchases",
-        name: routes.documents.purchases,
-        component: Purchases,
+        path: ":documentId",
+        name: routes.documents.document,
+        component: PreviewDocument,
         props: true,
-        meta: { title: "Sailshift :: My purchases" }
+        meta: { title: "Sailshift :: Document Preview" }
       }
     ]
   },

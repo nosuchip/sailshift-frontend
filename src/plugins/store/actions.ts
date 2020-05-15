@@ -8,6 +8,7 @@ import { User } from "@/typing/user";
 import { Document } from "@/typing/document";
 import { userMapper } from "@/utils/mappers";
 import { Pagination } from "@/typing/paginations";
+import { Filters } from "@/typing/search";
 
 const notification = ({ commit }: ActionParam, notification: Notification | null) => {
   commit(mutations.NOTIFICATION, notification);
@@ -102,15 +103,14 @@ const resetPassword = async ({ dispatch }: ActionParam, { token, password, confi
   }
 };
 
-const adminLoadDocuments = async ({ dispatch, commit }: ActionParam, pagination?: Pagination) => {
+const loadDocuments = async ({ dispatch, commit }: ActionParam, pagination?: Pagination) => {
   pagination = pagination || { page: 0 };
 
   try {
     const { data } = await api.loadDocuments(pagination);
-    commit(mutations.DOCUMENTS, {
-      pagination: data.pagination || pagination,
-      data: data.documents
-    });
+    commit(mutations.DOCUMENTS, { documents: data.data });
+
+    return data;
   } catch (error) {
     dispatch(actions.NOTIFICATION, {
       message: "Unable to load documents.",
@@ -118,6 +118,36 @@ const adminLoadDocuments = async ({ dispatch, commit }: ActionParam, pagination?
     });
   }
 };
+
+const searchDocuments = async ({ dispatch, commit }: ActionParam, filters: Filters, pagination?: Pagination) => {
+  pagination = pagination || { page: 0 };
+
+  try {
+    const { data } = await api.searchDocuments(filters, pagination);
+    commit(mutations.DOCUMENTS, { documents: data.data });
+
+    return data;
+  } catch (error) {
+    dispatch(actions.NOTIFICATION, {
+      message: "Unable to load documents.",
+      type: "error"
+    });
+  }
+};
+
+const loadPopularDocuments = async ({ commit, dispatch }: ActionParam) => {
+  try {
+    const { data } = await api.getPopularDocuments();
+    commit(mutations.POPULAR_DOCUMENTS, { documents: data.documents });
+  } catch (error) {
+    dispatch(actions.NOTIFICATION, {
+      message: "Unable to load most popular documents.",
+      type: "error"
+    });
+  }
+};
+
+// Admin //
 
 const adminCreateDocument = async ({ state, dispatch, commit }: ActionParam, payload: CreateDocumentPayload) => {
   try {
@@ -128,11 +158,7 @@ const adminCreateDocument = async ({ state, dispatch, commit }: ActionParam, pay
       payload.file
     );
 
-    const documents = [ ...state.documents.data, document ];
-    commit(mutations.DOCUMENTS, {
-      pagination: state.documents.pagination,
-      data: documents
-    });
+    commit(mutations.DOCUMENTS, { documents: [...state.documents, document] });
 
     dispatch(actions.NOTIFICATION, {
       message: "Document successfully created",
@@ -150,14 +176,27 @@ const adminCreateDocument = async ({ state, dispatch, commit }: ActionParam, pay
 
 const adminDeleteDocument = async ({ state, dispatch, commit }: ActionParam, { document }: { document: Document }) => {
   try {
-    await api.adminDeleteDocument(document);
+    await api.adminDeleteDocument(document.id);
 
-    const documents = state.documents.data.filter(doc => doc.id !== document.id);
+    const documents = state.documents.filter(doc => doc.id !== document.id);
 
-    commit(mutations.DOCUMENTS, {
-      pagination: state.documents.pagination,
-      data: documents
+    commit(mutations.DOCUMENTS, { documents });
+
+    dispatch(actions.NOTIFICATION, {
+      message: "Document deleted.",
+      type: "success"
     });
+  } catch (error) {
+    dispatch(actions.NOTIFICATION, {
+      message: "Unable to delete documents.",
+      type: "error"
+    });
+  }
+};
+
+const adminUpdateDocument = async ({ dispatch }: ActionParam, { document }: { document: Document }) => {
+  try {
+    await api.adminUpdateDocument(document);
 
     dispatch(actions.NOTIFICATION, {
       message: "Document deleted.",
@@ -206,9 +245,13 @@ export default {
   [actions.FORGOT_PASSWORD]: forgotPassword,
   [actions.REGISTER]: register,
   [actions.RESET_PASSWORD]: resetPassword,
-  [actions.ADMIN_LOAD_DOCUMENTS]: adminLoadDocuments,
+  [actions.LOAD_DOCUMENTS]: loadDocuments,
+  [actions.SEARCH_DOCUMENTS]: searchDocuments,
+  [actions.DOCUMENTS_LOAD_POPULAR]: loadPopularDocuments,
+
   [actions.ADMIN_LOAD_USERS]: adminLoadUsers,
   [actions.ADMIN_LOAD_PURCHASES]: adminLoadPurchases,
   [actions.ADMIN_CREATE_DOCUMENT]: adminCreateDocument,
-  [actions.ADMIN_DELETE_DOCUMENT]: adminDeleteDocument
+  [actions.ADMIN_DELETE_DOCUMENT]: adminDeleteDocument,
+  [actions.ADMIN_UPDATE_DOCUMENT]: adminUpdateDocument
 };

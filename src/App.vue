@@ -1,7 +1,5 @@
 <template>
   <v-app>
-    <!-- <header-nav-bar></header-nav-bar> -->
-
     <router-view></router-view>
 
     <v-snackbar v-model="notification" v-if="notification">
@@ -27,7 +25,6 @@ import { NotificationActionType } from "./typing/state/actions";
 
 @Component({
   components: {
-    // HeaderNavBar,
     AppFooter,
     Loader
   }
