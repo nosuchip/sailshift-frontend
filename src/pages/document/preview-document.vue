@@ -4,7 +4,7 @@
 
       <v-row class="document-heading">
         <v-col>
-          {{ document ? document.organization : "..." }} | {{ document ? document.department : "..." }}
+          {{ document ? document.organization : "..." }} | {{ document && document.department || "&mdash;" }}
         </v-col>
       </v-row>
 
@@ -78,7 +78,7 @@
   .document-heading {
     margin-right: 16px;
     margin-left: 16px;
-    border-bottom-color: blue;
+    border-bottom-color: #aaa;
     border-bottom-style: solid;
     border-bottom-width: 1px;
   }
