@@ -8,19 +8,22 @@
         </v-col>
       </v-row>
 
-      <v-row class="document-title pl-8">
+      <!-- <v-row class="document-title pl-8">
         <h1 class="heading">{{ document ? document.title : "..." }}</h1>
-      </v-row>
+      </v-row> -->
 
       <v-row class="document-main flex-row">
         <v-col sm="12" md="8" lg="9">
-          <v-card>
+          <v-card class="pl-4 pr-4">
+            <v-card-title class="justify-center">
+              <h2 class="heading">{{ document ? document.title : "..." }}</h2>
+            </v-card-title>
+
             <v-card-text>
-              <h3 class="headline text-center mb-4">{{ document ? document.title : "..." }}</h3>
-              <div>{{ document ? document.text : "..." }}</div>
+              <p :style="{ textAlign: 'justify' }">{{ document ? document.text : "..." }}</p>
             </v-card-text>
 
-            <v-card-actions class="justify-center">
+            <v-card-actions class="justify-center pb-4">
               <v-btn color="primary" @click="handlePurchase">Purchase to download full version</v-btn>
             </v-card-actions>
           </v-card>
