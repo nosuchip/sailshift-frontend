@@ -23,9 +23,9 @@
               <p :style="{ textAlign: 'justify' }">{{ document ? document.text : "..." }}</p>
             </v-card-text>
 
-            <v-card-actions class="justify-center pb-4">
+            <!-- <v-card-actions class="justify-center pb-4">
               <v-btn color="primary" @click="handlePurchase">Purchase to download full version</v-btn>
-            </v-card-actions>
+            </v-card-actions> -->
           </v-card>
         </v-col>
 
@@ -92,6 +92,7 @@ import { State, Action } from "vuex-class";
 import { actions } from "@/plugins/store";
 import { DocumentLoadActionType } from "@/typing/state/actions";
 import { User } from "@/typing/user";
+import { setToken } from "@/plugins/api";
 
 @Component({
   components: { TopPurchases }
@@ -99,6 +100,9 @@ import { User } from "@/typing/user";
 export default class Application extends Vue {
   @State("user")
   user!: User | null;
+
+  @State("token")
+  token!: string | null;
 
   @State("currentDocument")
   document!: Document | null;
@@ -110,9 +114,12 @@ export default class Application extends Vue {
   price: number = 19.99;
 
   mounted () {
-    if (this.user) {
+    if (this.token) {
       this.documentId = this.$route.params.documentId;
-      console.log(`Document preview mounted with document ID ${this.documentId}`);
+
+      // Need to do it here due timing
+      setToken(this.token);
+
       this.fetch();
     }
   }
