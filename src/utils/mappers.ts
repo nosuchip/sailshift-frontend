@@ -1,7 +1,7 @@
 import { Document } from "@/typing/document";
 import { Dictionary } from "@/typing/generics";
 import { User } from "@/typing/user";
-import { Purchase } from "@/typing/purchase";
+import { Purchase, PurchasePrepaymentPayload } from "@/typing/purchase";
 
 export const documentMapper = {
   fromBackend (document: Dictionary): Document {
@@ -10,7 +10,8 @@ export const documentMapper = {
       title: document.title,
       organization: document.organization,
       description: document.description,
-      text: document.text
+      text: document.text,
+      price: document.price
     };
   },
 
@@ -20,7 +21,8 @@ export const documentMapper = {
       title: document.title,
       organization: document.organization,
       description: document.description,
-      text: document.text
+      text: document.text,
+      price: document.price
     };
   }
 };
@@ -53,7 +55,10 @@ export const purchaseMapper = {
       id: purchase.id,
       purchasedAt: purchase.purchased_at,
       validUntil: purchase.valid_until,
-      downloadUrl: purchase.download_url
+      downloadUrl: purchase.download_url,
+      documentId: purchase.document_id,
+      userId: purchase.user_id,
+      paymentStatus: purchase.payment_status
     };
   },
 
@@ -62,7 +67,30 @@ export const purchaseMapper = {
       id: purchase.id,
       purchased_at: purchase.purchasedAt,
       valid_until: purchase.validUntil,
-      download_url: purchase.downloadUrl
+      download_url: purchase.downloadUrl,
+      document_id: purchase.documentId,
+      user_id: purchase.userId,
+      payment_status: purchase.paymentStatus
+    };
+  }
+};
+
+export const prepurchaseMapper = {
+  fromBackend (pre: Dictionary): PurchasePrepaymentPayload {
+    return {
+      documentId: pre.document_id,
+      amount: pre.amount,
+      currency: pre.currency,
+      paymentMethod: pre.payment_method
+    };
+  },
+
+  toBackend (pre: PurchasePrepaymentPayload): Dictionary {
+    return {
+      document_id: pre.documentId,
+      amount: pre.amount,
+      currency: pre.currency,
+      payment_method: pre.paymentMethod
     };
   }
 };

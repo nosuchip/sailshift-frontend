@@ -37,11 +37,17 @@
             </v-card-subtitle>
 
             <v-card-title class="display-3 justify-center">
-              ${{ price }}
+              ${{ document ? document.price.toFixed(2) : "..." }}
             </v-card-title>
 
             <v-card-actions class="justify-center">
-              <v-btn color="primary" @click="handlePurchase">Purchase document</v-btn>
+              <purchase-dialog
+                title="Purchase document"
+                :user="user"
+                :document="document"
+                :onPurchase="handlePurchase"
+                :onClose="handleClose"
+              />
             </v-card-actions>
 
             <v-card-subtitle class="pa-2 text-center font-weight-light">
@@ -88,6 +94,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import TopPurchases from "@/components/TopPurchases.vue";
+import PurchaseDialog from "@/components/PurchaseDialog.vue";
 import { State, Action } from "vuex-class";
 import { actions } from "@/plugins/store";
 import { DocumentLoadActionType } from "@/typing/state/actions";
@@ -95,7 +102,7 @@ import { User } from "@/typing/user";
 import { setToken } from "@/plugins/api";
 
 @Component({
-  components: { TopPurchases }
+  components: { TopPurchases, PurchaseDialog }
 })
 export default class Application extends Vue {
   @State("user")
@@ -111,7 +118,6 @@ export default class Application extends Vue {
   loadDocument!: DocumentLoadActionType;
 
   documentId: string = "";
-  price: number = 19.99;
 
   mounted () {
     if (this.token) {
@@ -129,9 +135,14 @@ export default class Application extends Vue {
   }
 
   handlePurchase () {
+    console.log("Purchased");
     // Send prepayment to backend
     // Get client secret
     // Send  user to payment page with client secred
+  }
+
+  handleClose () {
+    console.log("Not purchased");
   }
 }
 </script>

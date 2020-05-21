@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { Pagination, PaginatedApiResult } from "@/typing/paginations";
 import { User } from "@/typing/user";
 import { Document } from "@/typing/document";
-import { Purchase } from "@/typing/purchase";
+import { Purchase, PurchasePrepaymentPayload } from "@/typing/purchase";
 import { Dictionary } from "@/typing/generics";
 import { Filters } from "@/typing/search";
 
@@ -143,4 +143,12 @@ export const getPopularDocuments = async () => {
 
 export const loadDocument = async (documentId: string): Promise<AxiosResponse<{ document: Document }>> => {
   return instance.get(`/api/documents/${documentId}`);
+};
+
+export const prepurchaseDocument = async (payload: Dictionary): Promise<AxiosResponse<Dictionary>> => {
+  return instance.post("/api/payments/prepay", payload);
+};
+
+export const checkPurchaseDocument = async (paymentId: string): Promise<AxiosResponse<Dictionary>> => {
+  return instance.get(`/api/payments/check/${paymentId}`);
 };

@@ -4,4 +4,5 @@ export interface Document {
   organization: string;
   description: string;
   text: string;
+  price: number;
 }

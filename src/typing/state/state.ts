@@ -2,6 +2,7 @@ import { User } from "../user";
 import { Document } from "../document";
 import { Purchase } from "../purchase";
 import { Notification } from "../notification";
+import { Payment } from "../payment";
 
 export interface State {
   loading: boolean;
@@ -17,6 +18,8 @@ export interface State {
 
   purchases: Purchase[];
   currentPurchase: Purchase | null;
+
+  payment: Payment | null;
 
   users: User[];
 }

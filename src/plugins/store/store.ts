@@ -30,6 +30,8 @@ export const store = new Vuex.Store<State>({
     purchases: [],
     currentPurchase: null,
 
+    payment: null,
+
     users: []
   },
 
@@ -58,5 +60,6 @@ export const getEmptyDocument = () => ({
   title: "",
   organization: "",
   description: "",
-  text: ""
+  text: "",
+  price: 10.0
 });

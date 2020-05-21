@@ -16,6 +16,10 @@
       "node",
       "vuetify"
     ],
+    "typeRoots": [
+      "node_modules",
+      "typing"
+    ],
     "paths": {
       "@/*": [
         "src/*"

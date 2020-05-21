@@ -2,6 +2,7 @@ import { User } from "../user";
 import { Document } from "../document";
 import { Pagination, PaginatedApiResult } from "../paginations";
 import { Dictionary } from "../generics";
+import { PurchasePrepaymentPayload } from "../purchase";
 
 export interface NotificationActionType {
   (notification: Notification | null): void;
@@ -87,4 +88,12 @@ export interface LoadPopularDocumentsType {
 
 export interface DocumentLoadActionType {
   (documentId: string): Document;
+}
+
+export interface PurchasePrepaymentActionType {
+  (payload: PurchasePrepaymentPayload): any;
+}
+
+export interface CheckPurchaseActionType {
+  (paymentId: string): any;
 }

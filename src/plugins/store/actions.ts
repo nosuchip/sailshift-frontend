@@ -6,9 +6,10 @@ import { mutations, actions } from "./types";
 import { LoginPayload, ForgotPasswordPayload, RegisterPayload, ResetPayload, CreateDocumentPayload } from "@/typing/state/actions";
 import { User } from "@/typing/user";
 import { Document } from "@/typing/document";
-import { userMapper } from "@/utils/mappers";
+import { userMapper, prepurchaseMapper, purchaseMapper } from "@/utils/mappers";
 import { Pagination } from "@/typing/paginations";
 import { Filters } from "@/typing/search";
+import { PurchasePrepaymentPayload } from "@/typing/purchase";
 
 const notification = ({ commit }: ActionParam, notification: Notification | null) => {
   commit(mutations.NOTIFICATION, notification);
@@ -159,6 +160,16 @@ const loadDocument = async ({ commit, dispatch }: ActionParam, documentId: strin
   }
 };
 
+const prepurchaseDocument = async ({ dispatch }: ActionParam, payload: PurchasePrepaymentPayload) => {
+  const { data } = await api.prepurchaseDocument(prepurchaseMapper.toBackend(payload));
+  return { clientSecret: data.client_secret };
+};
+
+const checkPurchaseDocument = async ({ dispatch }: ActionParam, paymentId: string) => {
+  const { data: { purchase } } = await api.checkPurchaseDocument(paymentId);
+  return { purchase: purchaseMapper.fromBackend(purchase) };
+};
+
 // Admin //
 
 const adminCreateDocument = async ({ state, dispatch, commit }: ActionParam, payload: CreateDocumentPayload) => {
@@ -266,5 +277,8 @@ export default {
   [actions.ADMIN_LOAD_PURCHASES]: adminLoadPurchases,
   [actions.ADMIN_CREATE_DOCUMENT]: adminCreateDocument,
   [actions.ADMIN_DELETE_DOCUMENT]: adminDeleteDocument,
-  [actions.ADMIN_UPDATE_DOCUMENT]: adminUpdateDocument
+  [actions.ADMIN_UPDATE_DOCUMENT]: adminUpdateDocument,
+
+  [actions.PRE_PURCHASE_DOCUMENT]: prepurchaseDocument,
+  [actions.CHECK_PURCHASE_DOCUMENT]: checkPurchaseDocument
 };
