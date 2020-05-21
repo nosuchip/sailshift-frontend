@@ -80,7 +80,7 @@ export default class PaymentResultCard extends Vue {
   readonly checkPurchase!: CheckPurchaseActionType;
 
   get paymentId () {
-    return this.intent && this.intent.data && this.intent.data.object ? this.intent.data.object.id : null;
+    return this.intent ? this.intent.id : null;
   }
 
   stopTimer () {

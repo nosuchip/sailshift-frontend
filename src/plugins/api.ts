@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 import { Pagination, PaginatedApiResult } from "@/typing/paginations";
-import { User } from "@/typing/user";
+import { User, UserDocuments } from "@/typing/user";
 import { Document } from "@/typing/document";
-import { Purchase, PurchasePrepaymentPayload } from "@/typing/purchase";
+import { Purchase } from "@/typing/purchase";
 import { Dictionary } from "@/typing/generics";
 import { Filters } from "@/typing/search";
 
@@ -117,7 +117,7 @@ export const getDocument = async (documentId: Document): Promise<Document> => {
   return instance.get(`/api/documents/${documentId}`);
 };
 
-export const getActualDocument = async (): Promise<ApiResponse<Document>> => {
+export const getUserDocuments = async (): Promise<AxiosResponse<{ data: UserDocuments }>> => {
   return instance.get("/api/documents/my");
 };
 

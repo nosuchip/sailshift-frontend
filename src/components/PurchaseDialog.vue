@@ -69,7 +69,7 @@ type PaymentState = "intent" | "payment" | "done";
 })
 export default class PurchaseDialog extends Mixins(AsyncOpsControl) {
   open: boolean = false;
-  paymentStep: PaymentState = "done";
+  paymentStep: PaymentState = "intent";
   clientSecret: string | null = null;
 
   paymentError: StripeError | null = null;
@@ -258,9 +258,9 @@ export default class PurchaseDialog extends Mixins(AsyncOpsControl) {
   }
 
   handleDialogInput (opened: boolean) {
-    // if (opened) {
-    //   this.paymentStep = "intent";
-    // }
+    if (opened) {
+      this.paymentStep = "intent";
+    }
   }
 
   async handlePrepurchase () {

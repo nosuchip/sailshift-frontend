@@ -15,7 +15,6 @@ import ResetPassword from "@/pages/account/reset-password.vue";
 
 import PreviewDocument from "@/pages/document/preview-document.vue";
 import SearchDocument from "@/pages/document/search-document.vue";
-import PurchaseDocument from "@/pages/document/purchase-document.vue";
 import Purchases from "@/pages/document/purchases.vue";
 
 import AdminListUsers from "@/pages/admin/list-users.vue";
@@ -45,7 +44,6 @@ export const routes = {
   documents: {
     search: "document.search",
     document: "document.document",
-    purchaseDocument: "document.purchase_document",
     purchases: "document.purchases"
   },
 
@@ -135,13 +133,6 @@ export const routesDefinition: RouteConfig[] = [
         component: Purchases,
         props: true,
         meta: { title: "Sailshift :: My purchases" }
-      },
-      {
-        path: "purchase/:documentId",
-        name: routes.documents.purchaseDocument,
-        component: PurchaseDocument,
-        props: true,
-        meta: { title: "Sailshift :: Purchase" }
       },
       {
         path: ":documentId",

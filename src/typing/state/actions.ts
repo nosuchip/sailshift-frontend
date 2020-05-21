@@ -1,4 +1,4 @@
-import { User } from "../user";
+import { User, UserDocuments } from "../user";
 import { Document } from "../document";
 import { Pagination, PaginatedApiResult } from "../paginations";
 import { Dictionary } from "../generics";
@@ -96,4 +96,8 @@ export interface PurchasePrepaymentActionType {
 
 export interface CheckPurchaseActionType {
   (paymentId: string): any;
+}
+
+export interface GetUserDocumentsActionType {
+  (): UserDocuments;
 }

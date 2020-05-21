@@ -170,6 +170,11 @@ const checkPurchaseDocument = async ({ dispatch }: ActionParam, paymentId: strin
   return { purchase: purchaseMapper.fromBackend(purchase) };
 };
 
+const getUserDocuments = async ({ dispatch }: ActionParam) => {
+  const { data } = await api.getUserDocuments();
+  return data.data;
+};
+
 // Admin //
 
 const adminCreateDocument = async ({ state, dispatch, commit }: ActionParam, payload: CreateDocumentPayload) => {
@@ -280,5 +285,7 @@ export default {
   [actions.ADMIN_UPDATE_DOCUMENT]: adminUpdateDocument,
 
   [actions.PRE_PURCHASE_DOCUMENT]: prepurchaseDocument,
-  [actions.CHECK_PURCHASE_DOCUMENT]: checkPurchaseDocument
+  [actions.CHECK_PURCHASE_DOCUMENT]: checkPurchaseDocument,
+
+  [actions.GET_USER_DOCUMENTS]: getUserDocuments
 };
