@@ -170,7 +170,6 @@ export const routesDefinition: RouteConfig[] = [
 
 export const routesAcl = {
   userRoutes: [
-    routes.documents.purchaseDocument,
     routes.documents.purchases
   ],
 
