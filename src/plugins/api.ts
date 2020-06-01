@@ -9,7 +9,7 @@ import { Filters } from "@/typing/search";
 const DEFAULT_DOCUMENT_EXPIRATION_TIME_SEC = 10 * 60;
 
 export const instance = axios.create({
-  baseURL: "http://localhost:5000"
+  baseURL: process.env.VUE_APP_API_BASE_URL || ""
 });
 
 export const resetToken = () => {

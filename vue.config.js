@@ -6,7 +6,7 @@ module.exports = {
   ],
 
   outputDir: path.resolve(__dirname, "dist"),
-  assetsDir: process.env.NODE_ENV === "development" ? "" : "../static",
+  assetsDir: process.env.NODE_ENV === "development" ? "" : "static",
 
   devServer: {
     proxy: {

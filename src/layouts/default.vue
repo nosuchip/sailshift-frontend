@@ -51,8 +51,6 @@ import Component from "vue-class-component";
 import { Dictionary } from "@/typing/generics";
 import AccountButton from "@/components/AccountButton.vue";
 
-const logo = require("@/assets/img/logo.png");
-
 @Component({
   components: { AccountButton }
 })
@@ -61,7 +59,6 @@ export default class DefaultLayout extends Vue {
     miniVariant: boolean = false;
     clipped: boolean = false;
     title: string = "Sailshift";
-    logo: any = logo;
 
     items: Dictionary[] = [
       {
