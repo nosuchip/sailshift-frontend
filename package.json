@@ -5,7 +5,9 @@
   "scripts": {
     "start": "npm run serve",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build:prod": "vue-cli-service build",
+    "package:prod": "cp -r assets dist && tar -czvf static_bundle.tar.gz dist",
+    "build": "npm run build:prod && npm run package:prod",
     "lint": "vue-cli-service lint --fix"
   },
   "dependencies": {

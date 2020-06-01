@@ -41,7 +41,9 @@
             </v-card-title>
 
             <v-card-actions class="justify-center">
+
               <purchase-dialog
+                v-if="user && user.id"
                 title="Purchase document"
                 :user="user"
                 :document="document"
