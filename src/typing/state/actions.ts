@@ -3,6 +3,7 @@ import { Document } from "../document";
 import { Pagination, PaginatedApiResult } from "../paginations";
 import { Dictionary } from "../generics";
 import { PurchasePrepaymentPayload } from "../purchase";
+import { Notification } from "../notification";
 
 export interface NotificationActionType {
   (notification: Notification | null): void;

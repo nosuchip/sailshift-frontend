@@ -64,7 +64,7 @@ export default class TopPurchases extends Vue {
   loadPopularDocuments!: LoadPopularDocumentsType;
 
   get hasPopular () {
-    return this.popularDocuments && this.popularDocuments.length;
+    return this.popularDocuments && this.popularDocuments;
   }
 
   mounted () {

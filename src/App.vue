@@ -2,7 +2,7 @@
   <v-app>
     <router-view></router-view>
 
-    <v-snackbar v-model="notification" v-if="notification">
+    <v-snackbar v-model="notification" v-if="notification" top multi-line :color="color">
       {{ notification.message }}
       <v-btn :color="notification.type" text @click="setNotification(null)">Close</v-btn>
     </v-snackbar>
@@ -22,6 +22,7 @@ import { State, Mutation, Action } from "vuex-class";
 import { mutations, actions } from "./plugins/store";
 import { detectLocale } from "./utils/locale";
 import { NotificationActionType } from "./typing/state/actions";
+import { Notification } from "@/typing/notification";
 
 @Component({
   components: {
@@ -42,6 +43,21 @@ export default class Application extends Vue {
 
   set notification (value) {
     this.setNotification(value);
+  }
+
+  get color () {
+    if (this.notif) {
+      switch (this.notif.type) {
+        case "success":
+          return "green lighten-1";
+        case "warn":
+          return "amber darken-3";
+        case "error":
+          return "red darken-1";
+      }
+    }
+
+    return "blue lighten-1";
   }
 
   // @State("locale")

@@ -113,6 +113,7 @@ const loadDocuments = async ({ dispatch, commit }: ActionParam, pagination?: Pag
 
     return data;
   } catch (error) {
+    commit(mutations.DOCUMENTS, { documents: [] });
     dispatch(actions.NOTIFICATION, {
       message: "Unable to load documents.",
       type: "error"
@@ -129,6 +130,7 @@ const searchDocuments = async ({ dispatch, commit }: ActionParam, filters: Filte
 
     return data;
   } catch (error) {
+    commit(mutations.DOCUMENTS, { documents: [] });
     dispatch(actions.NOTIFICATION, {
       message: "Unable to load documents.",
       type: "error"
@@ -141,6 +143,7 @@ const loadPopularDocuments = async ({ commit, dispatch }: ActionParam) => {
     const { data } = await api.getPopularDocuments();
     commit(mutations.POPULAR_DOCUMENTS, { documents: data.data });
   } catch (error) {
+    commit(mutations.POPULAR_DOCUMENTS, { documents: [] });
     dispatch(actions.NOTIFICATION, {
       message: "Unable to load most popular documents.",
       type: "error"
@@ -153,6 +156,7 @@ const loadDocument = async ({ commit, dispatch }: ActionParam, documentId: strin
     const { data } = await api.loadDocument(documentId);
     commit(mutations.CURRENT_DOCUMENT, { document: data.document });
   } catch (error) {
+    commit(mutations.CURRENT_DOCUMENT, { document: null });
     dispatch(actions.NOTIFICATION, {
       message: "Unable to load most requested document.",
       type: "error"
