@@ -32,7 +32,8 @@ export const store = new Vuex.Store<State>({
 
     payment: null,
 
-    users: []
+    users: [],
+    editUser: null
   },
 
   getters: {

@@ -22,4 +22,5 @@ export interface State {
   payment: Payment | null;
 
   users: User[];
+  editUser: User | null;
 }

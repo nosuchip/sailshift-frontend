@@ -10,13 +10,42 @@ export default class AsyncOpsControl extends Vue {
   @Mutation(mutations.LOADING)
   loading!: LoadingMutationType;
 
-  async runWithLoading (fn: Function) {
+  async runWithLoading (fn: Function, catchFn?: Function) {
     this.loading(true);
 
     try {
       await fn();
+    } catch (err) {
+      if (catchFn) catchFn(err);
     } finally {
       this.loading(false);
+    }
+  }
+
+  async awaitForConditionAndRun (condition: () => boolean, fn: Function) {
+    let attemptsRemains = 5;
+    let timeout = 300;
+    const MULTIPLIER = 1.2;
+    let flag = false;
+
+    while (attemptsRemains >= 0) {
+      attemptsRemains--;
+
+      console.log(">> 1", flag);
+
+      if (flag) {
+        return fn();
+      }
+
+      console.log(">> 2", condition());
+
+      if (condition()) {
+        flag = true;
+      }
+
+      await new Promise(resolve => setTimeout(() => resolve(), timeout));
+      timeout = timeout * MULTIPLIER;
+      console.log(">> 3", timeout);
     }
   }
 }

@@ -102,3 +102,19 @@ export interface CheckPurchaseActionType {
 export interface GetUserDocumentsActionType {
   (): UserDocuments;
 }
+
+export interface UserUpdateActionType {
+  (user: User): User | null;
+}
+
+export interface UserDeleteActionType {
+  (user: User): void;
+}
+
+export interface UserToggleActionType {
+  (user: User): void;
+}
+
+export interface UsersLoadActionType {
+  (pagination?: Pagination): PaginatedApiResult<Document>;
+}

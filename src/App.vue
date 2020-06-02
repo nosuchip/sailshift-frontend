@@ -19,10 +19,12 @@ import Component from "vue-class-component";
 import AppFooter from "./components/Footer.vue";
 import Loader from "./components/Loader.vue";
 import { State, Mutation, Action } from "vuex-class";
+import { Watch } from "vue-property-decorator";
 import { mutations, actions } from "./plugins/store";
 import { detectLocale } from "./utils/locale";
 import { NotificationActionType } from "./typing/state/actions";
 import { Notification } from "@/typing/notification";
+import { setToken } from "@/plugins/api";
 
 @Component({
   components: {
@@ -31,6 +33,9 @@ import { Notification } from "@/typing/notification";
   }
 })
 export default class Application extends Vue {
+  @State("token")
+  readonly token!: string | null;
+
   @State("notification")
   readonly notif!: Notification;
 
@@ -58,6 +63,14 @@ export default class Application extends Vue {
     }
 
     return "blue lighten-1";
+  }
+
+  @Watch("token", { immediate: true })
+  handleTokenChange (val: string, prevVal: string) {
+    if (val && !prevVal) {
+      console.log(">> Set token");
+      setToken(this.token);
+    }
   }
 
   // @State("locale")

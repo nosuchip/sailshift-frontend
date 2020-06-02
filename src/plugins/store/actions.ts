@@ -206,10 +206,9 @@ const adminCreateDocument = async ({ state, dispatch, commit }: ActionParam, pay
   }
 };
 
-const adminDeleteDocument = async ({ state, dispatch, commit }: ActionParam, { document }: { document: Document }) => {
+const adminDeleteDocument = async ({ state, dispatch, commit }: ActionParam, document: Document) => {
   try {
     await api.adminDeleteDocument(document.id);
-
     const documents = state.documents.filter(doc => doc.id !== document.id);
 
     commit(mutations.DOCUMENTS, { documents });
@@ -219,6 +218,7 @@ const adminDeleteDocument = async ({ state, dispatch, commit }: ActionParam, { d
       type: "success"
     });
   } catch (error) {
+    console.log(">> err", error);
     dispatch(actions.NOTIFICATION, {
       message: "Unable to delete documents.",
       type: "error"
@@ -231,12 +231,12 @@ const adminUpdateDocument = async ({ dispatch }: ActionParam, { document }: { do
     await api.adminUpdateDocument(document);
 
     dispatch(actions.NOTIFICATION, {
-      message: "Document deleted.",
+      message: "Document updated.",
       type: "success"
     });
   } catch (error) {
     dispatch(actions.NOTIFICATION, {
-      message: "Unable to delete documents.",
+      message: "Unable to update documents.",
       type: "error"
     });
   }
@@ -251,6 +251,42 @@ const adminLoadUsers = async ({ dispatch, commit }: ActionParam, pagination?: Pa
   } catch (error) {
     dispatch(actions.NOTIFICATION, {
       message: "Unable to send reset password instructions to desired email.",
+      type: "error"
+    });
+  }
+};
+
+const adminUpdateUser = async ({ dispatch }: ActionParam, { user }: { user: User }) => {
+  try {
+    await api.adminUpdateUser(user);
+
+    dispatch(actions.NOTIFICATION, {
+      message: "User updated.",
+      type: "success"
+    });
+  } catch (error) {
+    dispatch(actions.NOTIFICATION, {
+      message: "Unable to update user.",
+      type: "error"
+    });
+  }
+};
+
+const adminDeleteUser = async ({ state, dispatch, commit }: ActionParam, user: User) => {
+  try {
+    await api.adminDeleteUser(user.id);
+    const users = state.users.filter(u => u.id !== user.id);
+
+    commit(mutations.USERS, { users });
+
+    dispatch(actions.NOTIFICATION, {
+      message: "User deleted.",
+      type: "success"
+    });
+  } catch (error) {
+    console.log(">> err", error);
+    dispatch(actions.NOTIFICATION, {
+      message: "Unable to delete user.",
       type: "error"
     });
   }
@@ -283,6 +319,8 @@ export default {
   [actions.LOAD_DOCUMENT]: loadDocument,
 
   [actions.ADMIN_LOAD_USERS]: adminLoadUsers,
+  [actions.ADMIN_UPDATE_USER]: adminUpdateUser,
+  [actions.ADMIN_DELETE_USER]: adminDeleteUser,
   [actions.ADMIN_LOAD_PURCHASES]: adminLoadPurchases,
   [actions.ADMIN_CREATE_DOCUMENT]: adminCreateDocument,
   [actions.ADMIN_DELETE_DOCUMENT]: adminDeleteDocument,

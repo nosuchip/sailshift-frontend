@@ -101,7 +101,6 @@ import { State, Action } from "vuex-class";
 import { actions } from "@/plugins/store";
 import { DocumentLoadActionType } from "@/typing/state/actions";
 import { User } from "@/typing/user";
-import { setToken } from "@/plugins/api";
 
 @Component({
   components: { TopPurchases, PurchaseDialog }
@@ -124,10 +123,6 @@ export default class Application extends Vue {
   mounted () {
     if (this.token) {
       this.documentId = this.$route.params.documentId;
-
-      // Need to do it here due timing
-      setToken(this.token);
-
       this.fetch();
     }
   }

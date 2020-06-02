@@ -1,9 +1,8 @@
 <template>
-  <v-container fluid class="fill-height white">
+  <v-container fluid class="fill-height white list-documents">
     <v-data-table
       :headers="headers"
       :items="documents"
-      sort-by="calories"
       class="elevation-1 fill-height flex-grow-1"
     >
       <template v-slot:top>
@@ -16,6 +15,7 @@
           ></v-divider>
           <v-spacer></v-spacer>
           <v-btn outlined color="secondary" dark @click="handleCreate">New Item</v-btn>
+          <v-btn outlined color="secondary" dark @click="fetch">Refresh</v-btn>
 
           <v-dialog v-model="dialog" max-width="800px">
             <v-card>
@@ -130,7 +130,7 @@ export default class ListDocuments extends Mixins(AsyncOpsControl) {
   pagination: Pagination = { page: 0 }
 
   @State("documents")
-  documents!: Document
+  documents!: Document[]
 
   @Action(actions.ADMIN_CREATE_DOCUMENT)
   createDocument!: DocumentCreateActionType;
@@ -162,7 +162,7 @@ export default class ListDocuments extends Mixins(AsyncOpsControl) {
   }
 
   mounted () {
-    this.loadDocuments({});
+    this.fetch();
   }
 
   @Watch("dialog", { immediate: true })
@@ -186,6 +186,10 @@ export default class ListDocuments extends Mixins(AsyncOpsControl) {
     }
   }
 
+  fetch () {
+    this.loadDocuments({});
+  }
+
   handleEdit (document: Document) {
     this.currentDocument = document;
     this.dialog = true;
@@ -197,7 +201,6 @@ export default class ListDocuments extends Mixins(AsyncOpsControl) {
 
   async handleSave () {
     const document = this.currentDocument;
-    console.log(">> handleSave", document);
 
     if (!document) return;
 
@@ -208,14 +211,17 @@ export default class ListDocuments extends Mixins(AsyncOpsControl) {
 
       if (result) {
         this.dialog = false;
+        this.loadDocuments({});
       }
     });
   }
 
-  handleDelete (document: Document) {
-    if (confirm("Do you really want to delete document? This action cannot be reverted.")) {
-      this.deleteDocument(document);
+  async handleDelete (document: Document) {
+    if (!confirm("Do you really want to delete document? This action cannot be reverted.")) {
+      return;
     }
+
+    await this.runWithLoading(() => this.deleteDocument(document));
   }
 }
 </script>
