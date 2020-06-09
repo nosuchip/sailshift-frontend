@@ -68,7 +68,7 @@ export interface DocumentCreateActionType {
 }
 
 export interface DocumentUpdateActionType {
-  (document: Document): Document | null;
+  ({ document }: { document: Document }): Document | null;
 }
 
 export interface DocumentDeleteActionType {
@@ -104,7 +104,7 @@ export interface GetUserDocumentsActionType {
 }
 
 export interface UserUpdateActionType {
-  (user: User): User | null;
+  ({ user }: { user: User }): User | null;
 }
 
 export interface UserDeleteActionType {

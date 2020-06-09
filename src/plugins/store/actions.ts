@@ -28,6 +28,7 @@ const contact = async ({ commit }: ActionParam, {
     await api.contactUs(email, subject, message);
     commit(mutations.NOTIFICATION, { message: "Thank you for your message", type: "success" });
   } catch (error) {
+    console.error(">> err", error);
     commit(mutations.NOTIFICATION, { message: "Unable to send message", type: "error" });
   }
 };
@@ -46,6 +47,7 @@ const login = async ({ commit, dispatch }: ActionParam, { email, password }: Log
     commit(mutations.LOGIN, { user: userMapper.fromBackend(user), token });
     return user;
   } catch (error) {
+    console.error(">> err", error);
     dispatch(actions.NOTIFICATION, {
       message: "Incorrect username or password",
       type: "error"
@@ -64,6 +66,7 @@ const forgotPassword = async ({ dispatch }: ActionParam, { email }: ForgotPasswo
       type: "success"
     });
   } catch (error) {
+    console.error(">> err", error);
     dispatch(actions.NOTIFICATION, {
       message: "Unable to send reset password instructions to desired email.",
       type: "error"
@@ -80,6 +83,7 @@ const register = async ({ dispatch }: ActionParam, { email, password, confirmati
       type: "success"
     });
   } catch (error) {
+    console.error(">> err", error);
     dispatch(actions.NOTIFICATION, {
       message: "Unable to create account with such email or password.",
       type: "error"
@@ -97,6 +101,7 @@ const resetPassword = async ({ dispatch }: ActionParam, { token, password, confi
     }
     );
   } catch (error) {
+    console.error(">> err", error);
     dispatch(actions.NOTIFICATION, {
       message: "Unable to set new password.",
       type: "error"
@@ -113,6 +118,7 @@ const loadDocuments = async ({ dispatch, commit }: ActionParam, pagination?: Pag
 
     return data;
   } catch (error) {
+    console.error(">> err", error);
     commit(mutations.DOCUMENTS, { documents: [] });
     dispatch(actions.NOTIFICATION, {
       message: "Unable to load documents.",
@@ -130,6 +136,7 @@ const searchDocuments = async ({ dispatch, commit }: ActionParam, filters: Filte
 
     return data;
   } catch (error) {
+    console.error(">> err", error);
     commit(mutations.DOCUMENTS, { documents: [] });
     dispatch(actions.NOTIFICATION, {
       message: "Unable to load documents.",
@@ -143,6 +150,7 @@ const loadPopularDocuments = async ({ commit, dispatch }: ActionParam) => {
     const { data } = await api.getPopularDocuments();
     commit(mutations.POPULAR_DOCUMENTS, { documents: data.data });
   } catch (error) {
+    console.error(">> err", error);
     commit(mutations.POPULAR_DOCUMENTS, { documents: [] });
     dispatch(actions.NOTIFICATION, {
       message: "Unable to load most popular documents.",
@@ -156,6 +164,7 @@ const loadDocument = async ({ commit, dispatch }: ActionParam, documentId: strin
     const { data } = await api.loadDocument(documentId);
     commit(mutations.CURRENT_DOCUMENT, { document: data.document });
   } catch (error) {
+    console.error(">> err", error);
     commit(mutations.CURRENT_DOCUMENT, { document: null });
     dispatch(actions.NOTIFICATION, {
       message: "Unable to load most requested document.",
@@ -164,17 +173,17 @@ const loadDocument = async ({ commit, dispatch }: ActionParam, documentId: strin
   }
 };
 
-const prepurchaseDocument = async ({ dispatch }: ActionParam, payload: PurchasePrepaymentPayload) => {
+const prepurchaseDocument = async (_param: ActionParam, payload: PurchasePrepaymentPayload) => {
   const { data } = await api.prepurchaseDocument(prepurchaseMapper.toBackend(payload));
   return { clientSecret: data.client_secret };
 };
 
-const checkPurchaseDocument = async ({ dispatch }: ActionParam, paymentId: string) => {
+const checkPurchaseDocument = async (_param: ActionParam, paymentId: string) => {
   const { data: { purchase } } = await api.checkPurchaseDocument(paymentId);
   return { purchase: purchaseMapper.fromBackend(purchase) };
 };
 
-const getUserDocuments = async ({ dispatch }: ActionParam) => {
+const getUserDocuments = async (_param: ActionParam) => {
   const { data } = await api.getUserDocuments();
   return data.data;
 };
@@ -199,6 +208,7 @@ const adminCreateDocument = async ({ state, dispatch, commit }: ActionParam, pay
 
     return document;
   } catch (error) {
+    console.error(">> err");
     dispatch(actions.NOTIFICATION, {
       message: "Unable to create document",
       type: "error"
@@ -218,7 +228,7 @@ const adminDeleteDocument = async ({ state, dispatch, commit }: ActionParam, doc
       type: "success"
     });
   } catch (error) {
-    console.log(">> err", error);
+    console.error(">> err", error);
     dispatch(actions.NOTIFICATION, {
       message: "Unable to delete documents.",
       type: "error"
@@ -235,6 +245,7 @@ const adminUpdateDocument = async ({ dispatch }: ActionParam, { document }: { do
       type: "success"
     });
   } catch (error) {
+    console.error(">> err", error);
     dispatch(actions.NOTIFICATION, {
       message: "Unable to update documents.",
       type: "error"
@@ -246,25 +257,40 @@ const adminLoadUsers = async ({ dispatch, commit }: ActionParam, pagination?: Pa
   pagination = pagination || { page: 0 };
 
   try {
-    const data = await api.loadUsers(pagination);
-    commit(mutations.USERS, data);
+    const { data } = await api.loadUsers(pagination);
+    commit(mutations.USERS, { users: data.data.map(userMapper.fromBackend) });
   } catch (error) {
+    console.error(">> err", error);
     dispatch(actions.NOTIFICATION, {
-      message: "Unable to send reset password instructions to desired email.",
+      message: "Unable to load users.",
       type: "error"
     });
   }
 };
 
-const adminUpdateUser = async ({ dispatch }: ActionParam, { user }: { user: User }) => {
+const adminUpdateUser = async ({ dispatch, state, commit }: ActionParam, { user }: { user: User }) => {
   try {
-    await api.adminUpdateUser(user);
+    const { data: { user: updatedUser } } = await api.adminUpdateUser(userMapper.toBackend(user));
+
+    const users = [ ...state.users ];
+    const index = users.findIndex(u => u.id === updatedUser.id);
+
+    console.log("Searching in users array", JSON.stringify(users), " for user ", JSON.stringify(updatedUser), "index is", JSON.stringify(index));
+
+    if (index !== -1) {
+      users.splice(index, 1, userMapper.fromBackend(updatedUser));
+    }
+
+    console.log("New users:", JSON.stringify(users));
+
+    commit(mutations.USERS, { users });
 
     dispatch(actions.NOTIFICATION, {
       message: "User updated.",
       type: "success"
     });
   } catch (error) {
+    console.error(">> err", error);
     dispatch(actions.NOTIFICATION, {
       message: "Unable to update user.",
       type: "error"
@@ -284,7 +310,7 @@ const adminDeleteUser = async ({ state, dispatch, commit }: ActionParam, user: U
       type: "success"
     });
   } catch (error) {
-    console.log(">> err", error);
+    console.error(">> err", error);
     dispatch(actions.NOTIFICATION, {
       message: "Unable to delete user.",
       type: "error"
@@ -299,8 +325,9 @@ const adminLoadPurchases = async ({ dispatch, commit }: ActionParam, pagination?
     const data = await api.loadPurchases(pagination);
     commit(mutations.PURCHASES, data);
   } catch (error) {
+    console.error(">> err", error);
     dispatch(actions.NOTIFICATION, {
-      message: "Unable to send reset password instructions to desired email.",
+      message: "Unable to load purchases.",
       type: "error"
     });
   }

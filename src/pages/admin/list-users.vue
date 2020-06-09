@@ -14,7 +14,7 @@
             vertical
           ></v-divider>
           <v-spacer></v-spacer>
-          <v-btn outlined color="secondary" dark @click="fetch">Refresh</v-btn>
+          <v-btn small outlined color="secondary" dark @click="fetch">Refresh</v-btn>
 
           <v-dialog v-model="dialog" max-width="800px">
             <v-card>
@@ -26,62 +26,74 @@
                 <v-container>
                   <v-row>
                     <v-col>
-                      <v-file-input
-                        v-if="!editUser.id"
-                        v-model="file"
-                        dense
-                        chips
-                        show-size
-                        label="Document to upload"
-                        accept="application/pdf"
-                      ></v-file-input>
-
                       <v-text-field
-                        v-else
-                        disabled
-                        label="Uploaded document URL"
-                        :value="editUser.url"
+                        label="Name"
+                        v-model="editUser.name"
+                      />
+                    </v-col>
+                    <v-col>
+                      <v-text-field
+                        type="password"
+                        label="Password"
+                        v-model="editUser.password"
+                        placeholder="********"
                       />
                     </v-col>
                   </v-row>
 
                   <v-row>
-                    <v-col cols="12" sm="6">
-                      <v-text-field dense v-model="editUser.title" label="Title"></v-text-field>
+                    <v-col>
+                      <v-text-field
+                        label="Name"
+                        v-model="editUser.email"
+                      />
                     </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-text-field dense v-model="editUser.organization" label="Organization"></v-text-field>
+                    <v-col>
+                      <v-text-field
+                        type="password"
+                        label="Password confirmation"
+                        v-model="editUser.confirmation"
+                        placeholder="********"
+                      />
                     </v-col>
                   </v-row>
 
                   <v-row>
-                    <v-col cols="12">
-                      <v-text-field dense v-model="editUser.description" label="Description"></v-text-field>
-                    </v-col>
-                  </v-row>
-
-                  <v-row>
-                    <v-col cols="12">
-                      <v-textarea
+                    <v-col>
+                      <v-select
+                        v-model="editUser.role"
+                        :items="roles"
+                        label="Role"
+                        item-text="title"
+                        item-value="value"
                         dense
-                        v-model="editUser.text"
-                        label="Parsed file text excerpts (about first page)"
-                        :disabled="!editUser.id"
-                      ></v-textarea>
+                      ></v-select>
+                    </v-col>
+                    <v-col>
+                      <v-switch
+                        label="Activated"
+                        v-model="editUser.active"
+                      ></v-switch>
                     </v-col>
                   </v-row>
+
                 </v-container>
               </v-card-text>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
                 <v-btn color="blue darken-1" text @click="handleSave">Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
+
+    <template v-slot:item.activatedAt="{ item }">
+      <span v-if="item.active">{{ item.activatedAt }}</span>
+      <span v-else class="red--text lighten-3">-- inactive --</span>
+    </template>
 
       <template v-slot:item.actions="{ item }">
         <v-icon
@@ -147,7 +159,7 @@ export default class ListUsers extends Mixins(AsyncOpsControl) {
     { ...this.defaultHeader, text: "ID", value: "id" },
     { ...this.defaultHeader, text: "Email", value: "email" },
     { ...this.defaultHeader, text: "Name", value: "name" },
-    { ...this.defaultHeader, text: "Activated at", value: "activated_at" },
+    { ...this.defaultHeader, text: "Activated at", value: "activatedAt" },
     { ...this.defaultHeader, text: "Role", value: "role" },
     { ...this.defaultHeader, value: "actions" }
   ];
@@ -156,6 +168,16 @@ export default class ListUsers extends Mixins(AsyncOpsControl) {
 
   get formTitle () {
     return "Edit user";
+  }
+
+  get roles () {
+    return [{
+      title: "User",
+      value: "user"
+    }, {
+      title: "Admin",
+      value: "admin"
+    }];
   }
 
   mounted () {
@@ -178,7 +200,8 @@ export default class ListUsers extends Mixins(AsyncOpsControl) {
   }
 
   handleEdit (user: User) {
-    this.editUser = user;
+    console.log(">> User:", JSON.stringify(user));
+    this.editUser = { ...user };
     this.dialog = true;
   }
 
@@ -188,7 +211,7 @@ export default class ListUsers extends Mixins(AsyncOpsControl) {
     if (!user) return;
 
     await this.runWithLoading(async () => {
-      const result = await this.updateUser(user);
+      const result = await this.runWithLoading<any>(() => this.updateUser({ user }));
 
       if (result) {
         this.dialog = false;

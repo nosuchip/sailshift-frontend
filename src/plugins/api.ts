@@ -66,6 +66,48 @@ export const loadDocuments = async (pagination: Pagination): Promise<ApiResponse
   return instance.get("/api/documents/", { params: pagination });
 };
 
+export const getDocument = async (documentId: Document): Promise<Document> => {
+  return instance.get(`/api/documents/${documentId}`);
+};
+
+export const getUserDocuments = async (): Promise<AxiosResponse<{ data: UserDocuments }>> => {
+  return instance.get("/api/documents/my");
+};
+
+export const getPastDocument = async (): Promise<ApiResponse<Document>> => {
+  return instance.get("/api/documents/admin/rerender");
+};
+
+export const searchDocuments = async (filters: Filters, pagination: Pagination): Promise<ApiResponse<Document>> => {
+  return instance.post("/api/documents/search", { ...pagination, ...filters });
+};
+
+export const loadUsers = async (pagination: Pagination): Promise<ApiResponse<User>> => {
+  return instance.get("/api/accounts/users", { params: pagination });
+};
+
+export const loadPurchases = async (pagination: Pagination): Promise<ApiResponse<Purchase>> => {
+  return instance.get("/api/purchases/", { params: pagination });
+};
+
+export const getPopularDocuments = async () => {
+  return instance.get("/api/documents/popular");
+};
+
+export const loadDocument = async (documentId: string): Promise<AxiosResponse<{ document: Document }>> => {
+  return instance.get(`/api/documents/${documentId}`);
+};
+
+export const prepurchaseDocument = async (payload: Dictionary): Promise<AxiosResponse<Dictionary>> => {
+  return instance.post("/api/payments/prepay", payload);
+};
+
+export const checkPurchaseDocument = async (paymentId: string): Promise<AxiosResponse<Dictionary>> => {
+  return instance.get(`/api/payments/check/${paymentId}`);
+};
+
+// ADMIN //
+
 export const adminCreateDocument = async (title: string, organization: string, description: string, file: File) => {
   const form = new FormData();
   form.append("title", title);
@@ -73,9 +115,11 @@ export const adminCreateDocument = async (title: string, organization: string, d
   if (description) form.append("description", description);
   form.append("file", file);
 
-  return instance.post("/api/documents/admin/upload", form, { headers: {
-    "Content-Type": "multipart/form-data"
-  } });
+  return instance.post("/api/documents/admin/upload", form, {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  });
 };
 
 export const adminPrerenderDocument = async (documentId: string) => {
@@ -84,10 +128,6 @@ export const adminPrerenderDocument = async (documentId: string) => {
 
 export const adminDeleteDocument = async (documentId: string) => {
   return instance.delete(`/api/documents/admin/${documentId}`);
-};
-
-export const adminUpdateDocument = async (document: Document) => {
-  return instance.put(`/api/documents/admin/${document.id}`, document);
 };
 
 export const adminCreateDownloadLink = async (documentId: string, expiresIn: number | null = null) => {
@@ -113,42 +153,14 @@ export const adminGrantAccess = async (
   return instance.post("/api/documents/admin/grant", payload);
 };
 
-export const getDocument = async (documentId: Document): Promise<Document> => {
-  return instance.get(`/api/documents/${documentId}`);
+export const adminUpdateDocument = async (document: Document) => {
+  return instance.put(`/api/documents/admin/${document.id}`, document);
 };
 
-export const getUserDocuments = async (): Promise<AxiosResponse<{ data: UserDocuments }>> => {
-  return instance.get("/api/documents/my");
+export const adminDeleteUser = async (userId: string): Promise<AxiosResponse<Dictionary>> => {
+  return instance.delete(`/api/accounts/${userId}`);
 };
 
-export const getPastDocument = async (): Promise<ApiResponse<Document>> => {
-  return instance.get("/api/documents/admin/rerender");
-};
-
-export const searchDocuments = async (filters: Filters, pagination: Pagination): Promise<ApiResponse<Document>> => {
-  return instance.post("/api/documents/search", { ...pagination, ...filters });
-};
-
-export const loadUsers = async (pagination: Pagination): Promise<ApiResponse<User>> => {
-  return instance.get("/api/users/", { params: pagination });
-};
-
-export const loadPurchases = async (pagination: Pagination): Promise<ApiResponse<Purchase>> => {
-  return instance.get("/api/purchases/", { params: pagination });
-};
-
-export const getPopularDocuments = async () => {
-  return instance.get("/api/documents/popular");
-};
-
-export const loadDocument = async (documentId: string): Promise<AxiosResponse<{ document: Document }>> => {
-  return instance.get(`/api/documents/${documentId}`);
-};
-
-export const prepurchaseDocument = async (payload: Dictionary): Promise<AxiosResponse<Dictionary>> => {
-  return instance.post("/api/payments/prepay", payload);
-};
-
-export const checkPurchaseDocument = async (paymentId: string): Promise<AxiosResponse<Dictionary>> => {
-  return instance.get(`/api/payments/check/${paymentId}`);
+export const adminUpdateUser = async (user: Dictionary): Promise<AxiosResponse<{ user: Dictionary }>> => {
+  return instance.put(`/api/accounts/${user.id}`, user);
 };

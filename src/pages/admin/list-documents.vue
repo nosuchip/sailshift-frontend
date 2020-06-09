@@ -14,8 +14,8 @@
             vertical
           ></v-divider>
           <v-spacer></v-spacer>
-          <v-btn outlined color="secondary" dark @click="handleCreate">New Item</v-btn>
-          <v-btn outlined color="secondary" dark @click="fetch">Refresh</v-btn>
+          <v-btn small outlined color="secondary" dark @click="handleCreate">New Item</v-btn>
+          <v-btn small outlined color="secondary" dark @click="fetch">Refresh</v-btn>
 
           <v-dialog v-model="dialog" max-width="800px">
             <v-card>
@@ -206,7 +206,7 @@ export default class ListDocuments extends Mixins(AsyncOpsControl) {
 
     await this.runWithLoading(async () => {
       const result = document.id
-        ? await this.updateDocument(document)
+        ? await this.updateDocument({ document })
         : await this.createDocument({ ...document, file: this.file as File });
 
       if (result) {

@@ -34,18 +34,30 @@ export const userMapper = {
       email: user.email,
       name: user.name,
       activatedAt: user.activated_at,
+      active: !!user.active,
       role: user.role
     };
   },
 
   toBackend (user: User): Dictionary {
-    return {
+    const data: Dictionary = {
       id: user.id,
       email: user.email,
       name: user.name,
       activated_at: user.activatedAt,
+      active: !!user.active,
       role: user.role
     };
+
+    if (user.password) {
+      data.password = user.password;
+    }
+
+    if (user.confirmation) {
+      data.confirmation = user.confirmation;
+    }
+
+    return data;
   }
 };
 

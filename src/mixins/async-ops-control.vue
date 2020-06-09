@@ -10,11 +10,12 @@ export default class AsyncOpsControl extends Vue {
   @Mutation(mutations.LOADING)
   loading!: LoadingMutationType;
 
-  async runWithLoading (fn: Function, catchFn?: Function) {
+  async runWithLoading<T = void> (fn: Function, catchFn?: Function) {
     this.loading(true);
 
     try {
-      await fn();
+      const res: T = await fn();
+      return res;
     } catch (err) {
       if (catchFn) catchFn(err);
     } finally {
