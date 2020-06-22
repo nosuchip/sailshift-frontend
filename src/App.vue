@@ -68,7 +68,6 @@ export default class Application extends Vue {
   @Watch("token", { immediate: true })
   handleTokenChange (val: string, prevVal: string) {
     if (val && !prevVal) {
-      console.log(">> Set token");
       setToken(this.token);
     }
   }

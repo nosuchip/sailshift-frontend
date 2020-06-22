@@ -3,7 +3,7 @@
         <v-col cols="12" xs="12" md="6">
             <v-card max-width>
                 <v-card-title>
-                    Login
+                    Register
                 </v-card-title>
 
                 <v-card-text>

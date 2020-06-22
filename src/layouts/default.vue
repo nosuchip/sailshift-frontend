@@ -27,13 +27,16 @@
         </v-navigation-drawer>
 -->
         <v-app-bar :clipped-left="clipped" fixed app>
-          <img
-            :src="logo"
-            :alt="title"
-            :style="{ height: '48px', width: '48px', marginRight: '16px', borderRadius: '5px' }"
-          />
+          <router-link :to="{ name: 'home' }">
+            <img
+              :src="logo"
+              :alt="title"
+              :style="logoStyle"
+            />
+          </router-link>
+
           <v-toolbar-title>
-              <h1 class="display-3">{{ title }}</h1>
+              <h3 :class="topBarClass">{{ title }}</h3>
           </v-toolbar-title>
 
           <v-spacer />
@@ -75,5 +78,36 @@ export default class DefaultLayout extends Vue {
         to: "/inspire"
       }
     ];
+
+    get logoStyle () {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+        case "sm":
+          return {
+            height: "42px",
+            width: "42px",
+            marginRight: "8px",
+            borderRadius: "3px"
+          };
+        default:
+          return {
+            height: "48px",
+            width: "48px",
+            marginRight: "16px",
+            borderRadius: "5px"
+          };
+      };
+    }
+
+    get topBarClass () {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return "d-none";
+        case "sm":
+          return "display-1";
+        default:
+          return "display-3";
+      };
+    }
 }
 </script>

@@ -4,7 +4,7 @@
       <v-row justify="center">
         <v-col lg="6" md="6" sm="12">
           <form @submit.prevent="search" class="heading">
-            <h1 class="display-4 text-center mb-8">SAILSHIFT</h1>
+            <h1 :class="titleClass">SAILSHIFT</h1>
             <h3 class="headline text-center mb-8">Get Help with your Homework Today</h3>
             <v-text-field
               outlined
@@ -45,6 +45,15 @@ export default class Home extends Vue {
 
   search () {
     this.$router.push({ name: "document.search", query: { query: this.query } });
+  }
+
+  get titleClass () {
+    switch (this.$vuetify.breakpoint.name) {
+      case "xs":
+        return "display-2 text-center mb-8";
+      default:
+        return "display-4 text-center mb-8";
+    };
   }
 }
 </script>

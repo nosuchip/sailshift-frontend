@@ -163,14 +163,17 @@ const loadDocument = async ({ commit, dispatch }: ActionParam, documentId: strin
   try {
     const { data } = await api.loadDocument(documentId);
     commit(mutations.CURRENT_DOCUMENT, { document: data.document });
+
+    return data.document;
   } catch (error) {
-    console.error(">> err", error);
     commit(mutations.CURRENT_DOCUMENT, { document: null });
     dispatch(actions.NOTIFICATION, {
-      message: "Unable to load most requested document.",
+      message: "Unable to load document.",
       type: "error"
     });
   }
+
+  return null;
 };
 
 const prepurchaseDocument = async (_param: ActionParam, payload: PurchasePrepaymentPayload) => {

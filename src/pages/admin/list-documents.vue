@@ -48,7 +48,7 @@
 
                   <v-row>
                     <v-col cols="12" sm="6">
-                      <v-text-field dense v-model="currentDocument.title" label="Title"></v-text-field>
+                      <v-text-field dense v-model="currentDocument.title" label="Title *" required></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field dense v-model="currentDocument.organization" label="Organization"></v-text-field>

@@ -62,16 +62,27 @@
     </div>
 
     <v-row class="justify-center" v-else-if="user">
+      <div
+        class="d-flex"
+        v-if="!documentNotFound"
+      >
         <v-progress-circular
           indeterminate
           size="24"
           color="indigo darken-2"
         ></v-progress-circular>
         <div class="ml-4 body-2">Loading document...</div>
+      </div>
+
+      <div v-else>
+        <h3 class="ml-4 red--text lighten-4 display-2">Document you searching for not found.</h3>
+        <h4 class="text-center mt-4">You could try to <router-link :to="{ name: 'document.search' }">search using another conditions</router-link></h4>
+      </div>
     </v-row>
 
     <v-row class="justify-center pa-8" v-else>
       <h1 class="display-3">Please login</h1>
+      <br/>
       <h3 class="display-1">
         Document preview available only for registered users. Please login or
         register via button above.
@@ -119,6 +130,7 @@ export default class Application extends Vue {
   loadDocument!: DocumentLoadActionType;
 
   documentId: string = "";
+  documentNotFound: boolean = false;
 
   mounted () {
     if (this.token) {
@@ -128,7 +140,8 @@ export default class Application extends Vue {
   }
 
   async fetch () {
-    await this.loadDocument(this.documentId);
+    const result = await this.loadDocument(this.documentId);
+    this.documentNotFound = !result;
   }
 
   handlePurchase () {
