@@ -112,7 +112,7 @@ import { State, Action, Mutation } from "vuex-class";
 import { Watch } from "vue-property-decorator";
 import { actions, mutations } from "@/plugins/store";
 import { DocumentLoadActionType } from "@/typing/state/actions";
-import { DocumentsMutationType } from "@/typing/state/mutations";
+import { CurrentDocumentMutationType } from "@/typing/state/mutations";
 import { User } from "@/typing/user";
 import { Route } from "vue-router";
 import _get from "lodash.get";
@@ -134,7 +134,7 @@ export default class Application extends Vue {
   loadDocument!: DocumentLoadActionType;
 
   @Mutation(mutations.CURRENT_DOCUMENT)
-  setCurrentDocument!: DocumentsMutationType;
+  setCurrentDocument!: CurrentDocumentMutationType;
 
   documentId: string = "";
   documentNotFound: boolean = false;
