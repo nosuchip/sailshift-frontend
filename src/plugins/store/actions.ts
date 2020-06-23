@@ -279,8 +279,6 @@ const adminUpdateUser = async ({ dispatch, state, commit }: ActionParam, { user 
     const users = [ ...state.users ];
     const index = users.findIndex(u => u.id === updatedUser.id);
 
-    console.log("Searching in users array", JSON.stringify(users), " for user ", JSON.stringify(updatedUser), "index is", JSON.stringify(index));
-
     if (index !== -1) {
       users.splice(index, 1, userMapper.fromBackend(updatedUser));
     }
@@ -293,6 +291,8 @@ const adminUpdateUser = async ({ dispatch, state, commit }: ActionParam, { user 
       message: "User updated.",
       type: "success"
     });
+
+    return updatedUser;
   } catch (error) {
     console.error(">> err", error);
     dispatch(actions.NOTIFICATION, {

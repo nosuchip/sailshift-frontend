@@ -104,7 +104,7 @@ export interface GetUserDocumentsActionType {
 }
 
 export interface UserUpdateActionType {
-  ({ user }: { user: User }): User | null;
+  ({ user }: { user: Partial<User> }): User | null;
 }
 
 export interface UserDeleteActionType {

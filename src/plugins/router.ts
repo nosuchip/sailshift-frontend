@@ -16,6 +16,7 @@ import ResetPassword from "@/pages/account/reset-password.vue";
 import PreviewDocument from "@/pages/document/preview-document.vue";
 import SearchDocument from "@/pages/document/search-document.vue";
 import Purchases from "@/pages/document/purchases.vue";
+import Profile from "@/pages/account/profile.vue";
 
 import AdminListUsers from "@/pages/admin/list-users.vue";
 import AdminListDocuments from "@/pages/admin/list-documents.vue";
@@ -38,7 +39,8 @@ export const routes = {
     login: "account.login",
     register: "account.register",
     forgotPassword: "account.forgot_password",
-    resetPassword: "account.reset_password"
+    resetPassword: "account.reset_password",
+    profile: "account.profile"
   },
 
   documents: {
@@ -111,6 +113,20 @@ export const routesDefinition: RouteConfig[] = [
         component: ResetPassword,
         props: true,
         meta: { title: "Sailshift :: Reset password" }
+      }
+    ]
+  },
+
+  {
+    path: "/me",
+    component: DefaultLayout,
+    children: [
+      {
+        path: "profile",
+        name: routes.account.profile,
+        component: Profile,
+        props: true,
+        meta: { title: "Sailshift :: My Profile" }
       }
     ]
   },
