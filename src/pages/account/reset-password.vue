@@ -6,9 +6,21 @@
 
         <v-card-text v-if="token && !success">
           <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="handleSubmit">
-            <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
+            <v-text-field
+              v-model="password"
+              label="Password"
+              type="password"
+              required
+              :rules="rules.password"
+            ></v-text-field>
 
-            <v-text-field v-model="confirmation" label="Confirmation" type="password" required></v-text-field>
+            <v-text-field
+              v-model="confirmation"
+              label="Confirmation"
+              type="password"
+              required
+              :rules="rules.password"
+            ></v-text-field>
 
             <v-row class="align-center">
               <v-col class="pt-0 pb-0">
@@ -61,6 +73,13 @@ export default class Contact extends Vue {
   valid = true;
   success = false;
 
+  rules = {
+    password: [
+      (v: string) => !!v || "Password is required",
+      (v: string) => v.length >= 6 || "Password must be at least 6 characters long"
+    ]
+  };
+
   created () {
     this.token = this.$route.params.token;
   }
@@ -71,6 +90,16 @@ export default class Contact extends Vue {
 
   async handleSubmit () {
     if (!this.form.validate()) {
+      return;
+    }
+
+    if (this.password !== this.confirmation) {
+      alert("Password must match confirmation"); ;
+      return;
+    }
+
+    if (this.password.length < 6) {
+      alert("Password must match confirmation"); ;
       return;
     }
 

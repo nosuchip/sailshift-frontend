@@ -15,7 +15,7 @@ const notification = ({ commit }: ActionParam, notification: Notification | null
   commit(mutations.NOTIFICATION, notification);
 };
 
-const contact = async ({ commit }: ActionParam, {
+const contact = async ({ commit, dispatch }: ActionParam, {
   email,
   subject,
   message
@@ -24,12 +24,13 @@ const contact = async ({ commit }: ActionParam, {
   subject: string;
   message: string;
 }) => {
+  console.log("Sending contact message");
   try {
     await api.contactUs(email, subject, message);
-    commit(mutations.NOTIFICATION, { message: "Thank you for your message", type: "success" });
+    dispatch(actions.NOTIFICATION, { message: "Thank you for your message", type: "success" });
   } catch (error) {
     console.error(">> err", error);
-    commit(mutations.NOTIFICATION, { message: "Unable to send message", type: "error" });
+    dispatch(actions.NOTIFICATION, { message: "Unable to send message.", type: "error" });
   }
 };
 

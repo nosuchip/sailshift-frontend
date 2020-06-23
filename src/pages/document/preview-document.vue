@@ -108,10 +108,14 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import TopPurchases from "@/components/TopPurchases.vue";
 import PurchaseDialog from "@/components/PurchaseDialog.vue";
-import { State, Action } from "vuex-class";
-import { actions } from "@/plugins/store";
+import { State, Action, Mutation } from "vuex-class";
+import { Watch } from "vue-property-decorator";
+import { actions, mutations } from "@/plugins/store";
 import { DocumentLoadActionType } from "@/typing/state/actions";
+import { DocumentsMutationType } from "@/typing/state/mutations";
 import { User } from "@/typing/user";
+import { Route } from "vue-router";
+import _get from "lodash.get";
 
 @Component({
   components: { TopPurchases, PurchaseDialog }
@@ -129,11 +133,19 @@ export default class Application extends Vue {
   @Action(actions.LOAD_DOCUMENT)
   loadDocument!: DocumentLoadActionType;
 
+  @Mutation(mutations.CURRENT_DOCUMENT)
+  setCurrentDocument!: DocumentsMutationType;
+
   documentId: string = "";
   documentNotFound: boolean = false;
 
-  mounted () {
-    if (this.token) {
+  @Watch("$route", { immediate: true, deep: true })
+  onUrlChange (newRoute: Route, oldRoute: Route) {
+    const newDocId = _get(newRoute, "params.documentId");
+    const prevDocId = _get(oldRoute, "params.documentId");
+
+    if (this.token && newDocId !== prevDocId) {
+      this.setCurrentDocument({ document: null });
       this.documentId = this.$route.params.documentId;
       this.fetch();
     }

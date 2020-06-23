@@ -29,7 +29,7 @@ export const login = (email: string, password: string) => {
 };
 
 export const contactUs = (email: string, subject: string, message: string) => {
-  return instance.post("/api/contact", { email, subject, message });
+  return instance.post("/api/accounts/contact", { email, subject, message });
 };
 
 export const forgotPassword = (email: string) => {

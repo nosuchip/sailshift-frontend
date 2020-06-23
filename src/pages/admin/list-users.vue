@@ -200,7 +200,6 @@ export default class ListUsers extends Mixins(AsyncOpsControl) {
   }
 
   handleEdit (user: User) {
-    console.log(">> User:", JSON.stringify(user));
     this.editUser = { ...user };
     this.dialog = true;
   }
@@ -209,6 +208,18 @@ export default class ListUsers extends Mixins(AsyncOpsControl) {
     const user = this.editUser;
 
     if (!user) return;
+
+    if (user.password || user.confirmation) {
+      if (user.password && user.password.length < 6) {
+        alert("Password must be at least 6 characters long");
+        return;
+      }
+
+      if (user.confirmation !== user.password) {
+        alert("Password and confirmation must match");
+        return;
+      }
+    }
 
     await this.runWithLoading(async () => {
       const result = await this.runWithLoading<any>(() => this.updateUser({ user }));

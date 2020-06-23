@@ -18,6 +18,7 @@
                             :rules="rules.email"
                             label="E-mail"
                             required
+                            :disabled="done"
                         ></v-text-field>
 
                         <v-text-field
@@ -25,6 +26,7 @@
                             :rules="rules.subject"
                             label="Subject"
                             required
+                            :disabled="done"
                         ></v-text-field>
 
                         <v-textarea
@@ -32,10 +34,11 @@
                             :rules="rules.message"
                             label="Message"
                             required
+                            :disabled="done"
                         >
                         </v-textarea>
 
-                        <v-btn type="submit" color="primary">
+                        <v-btn type="submit" color="primary" :disabled="done">
                             Send
                         </v-btn>
                     </v-form>
@@ -70,6 +73,7 @@ export default class Contact extends Vue {
     email: string = "";
     subject: string = "";
     message: string = "";
+    done: boolean = false;
 
     rules = {
       email: [
@@ -92,7 +96,8 @@ export default class Contact extends Vue {
       this.loading(true);
 
       try {
-        await api.contactUs(this.email, this.subject, this.message);
+        await this.contactUs({ email: this.email, subject: this.subject, message: this.message });
+        // this.done = true;
       } finally {
         this.loading(false);
       }

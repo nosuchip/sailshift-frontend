@@ -36,7 +36,7 @@
           </router-link>
 
           <v-toolbar-title>
-              <h3 :class="topBarClass">{{ title }}</h3>
+            <h3 :class="topBarClass">{{ title }}</h3>
           </v-toolbar-title>
 
           <v-spacer />
