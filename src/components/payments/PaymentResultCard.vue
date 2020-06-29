@@ -14,9 +14,8 @@
 
         <div v-if="intent">
           <p>
-            Your payment <b>{{ intent.id }}</b> received and now processing. You could close this popup safely,
-            when payment procesed - document appears in your profile for predefined time.
-            Otherwise you can wait, we perform payment status check for you in a moment.
+            Your payment <b>{{ intent.id }}</b> has been received and is now processing. If payment is successfully
+            processed, feel free to close this popup. Otherwise, please wait as we process your payment.
           </p>
 
           <v-progress-linear indeterminate size="32" v-if="!purchase"></v-progress-linear>

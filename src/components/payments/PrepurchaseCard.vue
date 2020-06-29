@@ -15,8 +15,7 @@
         </div>
 
         <div>
-          <p>Please review what data we collect and how do we secure it:</p>
-          <div>All payments performed through Strip and we do not store any of your credit card data.</div>
+          <p>All payments are performed through Stripe and we do not store any of your credit card data.</p>
         </div>
       </v-card-text>
 

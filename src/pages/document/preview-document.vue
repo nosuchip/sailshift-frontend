@@ -8,10 +8,6 @@
         </v-col>
       </v-row>
 
-      <!-- <v-row class="document-title pl-8">
-        <h1 class="heading">{{ document ? document.title : "..." }}</h1>
-      </v-row> -->
-
       <v-row class="document-main flex-row">
         <v-col sm="12" md="8" lg="9">
           <v-card class="pl-4 pr-4">
@@ -22,18 +18,13 @@
             <v-card-text>
               <p :style="{ textAlign: 'justify' }">{{ document ? document.text : "..." }}</p>
             </v-card-text>
-
-            <!-- <v-card-actions class="justify-center pb-4">
-              <v-btn color="primary" @click="handlePurchase">Purchase to download full version</v-btn>
-            </v-card-actions> -->
           </v-card>
         </v-col>
 
         <v-col sm="12" md="4" lg="3">
           <v-card>
             <v-card-subtitle>
-              Upon payment link to download document will be sent to your email.
-              Also document appears under your profile "active documents" section.
+              Upon payment document appears under your profile "active documents" section.
             </v-card-subtitle>
 
             <v-card-title class="display-3 justify-center">
@@ -61,7 +52,7 @@
 
     </div>
 
-    <v-row class="justify-center" v-else-if="user">
+    <v-row class="justify-center" v-else>
       <div
         class="d-flex"
         v-if="!documentNotFound"
@@ -78,15 +69,6 @@
         <h3 class="ml-4 red--text lighten-4 display-2">Document you searching for not found.</h3>
         <h4 class="text-center mt-4">You could try to <router-link :to="{ name: 'document.search' }">search using another conditions</router-link></h4>
       </div>
-    </v-row>
-
-    <v-row class="justify-center pa-8" v-else>
-      <h1 class="display-3">Please login</h1>
-      <br/>
-      <h3 class="display-1">
-        Document preview available only for registered users. Please login or
-        register via button above.
-      </h3>
     </v-row>
 
     <top-purchases title="Popular documents" :maxHeight="180" :maxWidth="180" />
@@ -143,12 +125,16 @@ export default class PreviewDocument extends Vue {
   documentId: string = "";
   documentNotFound: boolean = false;
 
+  created () {
+
+  }
+
   @Watch("$route", { immediate: true, deep: true })
   onUrlChange (newRoute: Route, oldRoute: Route) {
     const newDocId = _get(newRoute, "params.documentId");
     const prevDocId = _get(oldRoute, "params.documentId");
 
-    if (this.token && newDocId !== prevDocId) {
+    if (newDocId !== prevDocId) {
       this.setCurrentDocument({ document: null });
       this.documentId = this.$route.params.documentId;
       this.fetch();
@@ -175,7 +161,7 @@ export default class PreviewDocument extends Vue {
   getMetaInfo (): MetaInfo {
     const doc: Dictionary = this.document || {};
 
-    console.log(">> Rendering page metadata with document", doc);
+    console.log(">> Rendering page metadata with document", JSON.stringify(doc));
 
     return {
       title: this.document ? this.document.title : "Sailshift: Document preview",
@@ -192,7 +178,8 @@ export default class PreviewDocument extends Vue {
         { name: "og:description", content: doc.text ? doc.text.slice(0, 100) : "Sailshift: Document description" },
         { name: "og:type", content: "document" },
         { name: "og:url", content: "https://sailshift.com/" },
-        { name: "og:image", content: "https://sailshift.com/static/img/icons/android-chrome-192x192.png" }
+        { name: "og:image", content: "https://sailshift.com/static/img/icons/android-chrome-192x192.png" },
+        { name: "meta-ready", content: doc.title ? "true" : "" }
       ]
     };
   }
