@@ -117,19 +117,19 @@ export const routesDefinition: RouteConfig[] = [
     ]
   },
 
-  {
-    path: "/me",
-    component: DefaultLayout,
-    children: [
-      {
-        path: "profile",
-        name: routes.account.profile,
-        component: Profile,
-        props: true,
-        meta: { title: "Sailshift :: My Profile" }
-      }
-    ]
-  },
+  // {
+  //   path: "/me",
+  //   component: DefaultLayout,
+  //   children: [
+  //     {
+  //       path: "profile",
+  //       name: routes.account.profile,
+  //       component: Profile,
+  //       props: true,
+  //       meta: { title: "Sailshift :: My Profile" }
+  //     }
+  //   ]
+  // },
 
   {
     path: "/document",

@@ -9,6 +9,7 @@ export const documentMapper = {
       id: document.id,
       title: document.title,
       organization: document.organization,
+      department: document.department,
       description: document.description,
       text: document.text,
       price: document.price
@@ -20,6 +21,7 @@ export const documentMapper = {
       id: document.id,
       title: document.title,
       organization: document.organization,
+      department: document.department,
       description: document.description,
       text: document.text,
       price: document.price

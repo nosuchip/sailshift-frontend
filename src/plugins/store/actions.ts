@@ -198,7 +198,8 @@ const adminCreateDocument = async ({ state, dispatch, commit }: ActionParam, pay
   try {
     const document = await api.adminCreateDocument(
       payload.title,
-      payload.organization,
+      payload.organization || "",
+      payload.department || "",
       payload.description || "",
       payload.file
     );

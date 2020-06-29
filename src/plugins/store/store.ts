@@ -60,6 +60,7 @@ export const getEmptyDocument = () => ({
   id: "",
   title: "",
   organization: "",
+  department: "",
   description: "",
   text: "",
   price: 10.0

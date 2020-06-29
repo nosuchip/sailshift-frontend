@@ -95,6 +95,7 @@
       <span v-else class="red--text lighten-3">-- inactive --</span>
     </template>
 
+      <!--
       <template v-slot:item.actions="{ item }">
         <v-icon
           small
@@ -111,6 +112,7 @@
           mdi-delete
         </v-icon>
       </template>
+      -->
 
       <template v-slot:no-data>
         Loading data...
@@ -199,10 +201,10 @@ export default class ListUsers extends Mixins(AsyncOpsControl) {
     this.loadUsers({});
   }
 
-  handleEdit (user: User) {
-    this.editUser = { ...user };
-    this.dialog = true;
-  }
+  // handleEdit (user: User) {
+  //   this.editUser = { ...user };
+  //   this.dialog = true;
+  // }
 
   async handleSave () {
     const user = this.editUser;
@@ -231,12 +233,12 @@ export default class ListUsers extends Mixins(AsyncOpsControl) {
     });
   }
 
-  async handleDelete (user: User) {
-    if (!confirm("Do you really want to delete user? This action cannot be reverted.")) {
-      return;
-    }
+  // async handleDelete (user: User) {
+  //   if (!confirm("Do you really want to delete user? This action cannot be reverted.")) {
+  //     return;
+  //   }
 
-    await this.runWithLoading(() => this.deleteUser(user));
-  }
+  //   await this.runWithLoading(() => this.deleteUser(user));
+  // }
 }
 </script>

@@ -58,7 +58,8 @@ export interface ResetPasswordActionType {
 
 export interface CreateDocumentPayload {
   title: string;
-  organization: string;
+  organization?: string;
+  department?: string;
   description?: string;
   file: File;
 }

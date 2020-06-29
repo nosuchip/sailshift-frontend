@@ -128,6 +128,24 @@ export default class SearchDocumentPage extends Mixins(AsyncOpsControl) {
 
       pagination.page += 1;
 
+      if (Array.isArray(this.documents)) {
+        const orgs: Set<string> = new Set();
+        const deps: Set<string> = new Set();
+
+        this.documents.forEach(document => {
+          if (document.organization) {
+            orgs.add(document.organization);
+          }
+
+          if (document.department) {
+            deps.add(document.department);
+          }
+        });
+
+        this.organizations = Array.from(orgs).map(org => ({ title: org, value: org }));
+        this.departments = Array.from(deps).map(dep => ({ title: dep, value: dep }));
+      }
+
       this.pagination = { ...this.pagination, ...pagination };
     });
   }

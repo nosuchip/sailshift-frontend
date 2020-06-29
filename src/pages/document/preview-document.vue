@@ -113,14 +113,18 @@ import { Watch } from "vue-property-decorator";
 import { actions, mutations } from "@/plugins/store";
 import { DocumentLoadActionType } from "@/typing/state/actions";
 import { CurrentDocumentMutationType } from "@/typing/state/mutations";
+import { Document } from "@/typing/document";
 import { User } from "@/typing/user";
 import { Route } from "vue-router";
 import _get from "lodash.get";
+import { Dictionary } from "../../typing/generics";
+import { MetaInfo } from "vue-meta";
+import { Meta } from "@sophosoft/vue-meta-decorator";
 
-@Component({
+@Component<PreviewDocument>({
   components: { TopPurchases, PurchaseDialog }
 })
-export default class Application extends Vue {
+export default class PreviewDocument extends Vue {
   @State("user")
   user!: User | null;
 
@@ -166,6 +170,31 @@ export default class Application extends Vue {
   handleClose () {
     console.log("Not purchased");
   }
+
+  @Meta
+  getMetaInfo (): MetaInfo {
+    const doc: Dictionary = this.document || {};
+
+    console.log(">> Rendering page metadata with document", doc);
+
+    return {
+      title: this.document ? this.document.title : "Sailshift: Document preview",
+      htmlAttrs: {
+        lang: "en",
+        amp: "true"
+      },
+      meta: [
+        { charset: "utf-8" },
+        { name: "description", content: doc.text ? doc.text.slice(0, 100) : "Sailshift: Document description" },
+        { name: "organization", content: doc.organization || "" },
+        { name: "department", content: doc.department || "" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: "og:description", content: doc.text ? doc.text.slice(0, 100) : "Sailshift: Document description" },
+        { name: "og:type", content: "document" },
+        { name: "og:url", content: "https://sailshift.com/" },
+        { name: "og:image", content: "https://sailshift.com/static/img/icons/android-chrome-192x192.png" }
+      ]
+    };
+  }
 }
 </script>
-actio

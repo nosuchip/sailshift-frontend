@@ -48,6 +48,7 @@
                 <tr>
                   <th class="text-left">Document</th>
                   <th class="text-left">Organization</th>
+                  <th class="text-left">Department</th>
                   <th class="text-left">Purchased at</th>
                   <th class="text-left">Valid until</th>
                 </tr>
@@ -60,6 +61,7 @@
                 <tr v-else v-for="doc in past" :key="doc.id">
                   <td>{{ doc.document.title }}</td>
                   <td>{{ doc.document.organization }}</td>
+                  <td>{{ doc.document.department }}</td>
                   <td>{{ doc.purchased_at }}</td>
                   <td>{{ doc.valid_until }}</td>
                 </tr>

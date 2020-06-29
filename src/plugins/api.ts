@@ -108,10 +108,17 @@ export const checkPurchaseDocument = async (paymentId: string): Promise<AxiosRes
 
 // ADMIN //
 
-export const adminCreateDocument = async (title: string, organization: string, description: string, file: File) => {
+export const adminCreateDocument = async (
+  title: string,
+  organization: string,
+  department: string,
+  description: string,
+  file: File
+) => {
   const form = new FormData();
   form.append("title", title);
   form.append("organization", organization);
+  form.append("department", department);
   if (description) form.append("description", description);
   form.append("file", file);
 

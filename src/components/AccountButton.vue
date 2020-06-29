@@ -15,11 +15,11 @@
       <v-list-item link to="/document/purchases">
         <v-list-item-title>My purchases</v-list-item-title>
       </v-list-item>
-
+<!--
       <v-list-item link to="/me/profile">
         <v-list-item-title>My profile</v-list-item-title>
       </v-list-item>
-
+-->
       <v-menu offset-x v-if="isAdmin" open-on-hover left>
         <template v-slot:activator="{ on }">
           <v-list-item link v-on="on">

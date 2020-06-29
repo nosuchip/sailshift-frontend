@@ -7,6 +7,7 @@ import router from "./plugins/router";
 import { store } from "./plugins/store";
 import vuetify from "./plugins/vuetify";
 import i18n from "./plugins/i18n";
+import "./plugins/meta";
 
 import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "vuetify/dist/vuetify.css";

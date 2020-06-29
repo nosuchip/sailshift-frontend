@@ -47,11 +47,14 @@
                   </v-row>
 
                   <v-row>
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" md="4">
                       <v-text-field dense v-model="currentDocument.title" label="Title *" required></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" md="4">
                       <v-text-field dense v-model="currentDocument.organization" label="Organization"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <v-text-field dense v-model="currentDocument.department" label="Department"></v-text-field>
                     </v-col>
                   </v-row>
 
@@ -150,6 +153,7 @@ export default class ListDocuments extends Mixins(AsyncOpsControl) {
     { ...this.defaultHeader, text: "ID", value: "id" },
     { ...this.defaultHeader, text: "Title", value: "title" },
     { ...this.defaultHeader, text: "Organization", value: "organization" },
+    { ...this.defaultHeader, text: "Department", value: "department" },
     { ...this.defaultHeader, text: "Description", value: "description" },
     { ...this.defaultHeader, value: "actions" }
   ];
