@@ -7,7 +7,7 @@
         Payment details
       </v-card-title>
 
-      <v-card-text>
+      <v-card-text v-if="stripePublishableKey">
         <stripe-elements
           ref="stripeRef"
           :pk="stripePublishableKey"
@@ -53,7 +53,8 @@ import { User } from "../../typing/user";
   }
 })
 export default class PurchaseCard extends Vue {
-  stripePublishableKey: string = process.env.VUE_APP_STRIPE_API_PUBLISHABLE_KEY as string;
+  @State("stripePublishableKey")
+  stripePublishableKey!: string | null;
 
   @State("user")
   user!: User | null;

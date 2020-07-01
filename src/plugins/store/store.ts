@@ -33,7 +33,9 @@ export const store = new Vuex.Store<State>({
     payment: null,
 
     users: [],
-    editUser: null
+    editUser: null,
+
+    stripePublishableKey: null
   },
 
   getters: {

@@ -177,8 +177,9 @@ const loadDocument = async ({ commit, dispatch }: ActionParam, documentId: strin
   return null;
 };
 
-const prepurchaseDocument = async (_param: ActionParam, payload: PurchasePrepaymentPayload) => {
+const prepurchaseDocument = async ({ commit }: ActionParam, payload: PurchasePrepaymentPayload) => {
   const { data } = await api.prepurchaseDocument(prepurchaseMapper.toBackend(payload));
+  commit(mutations.STRIPE_PUB_KEY, { key: data.stripe_publishable_key });
   return { clientSecret: data.client_secret };
 };
 

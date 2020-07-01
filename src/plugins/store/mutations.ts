@@ -55,5 +55,9 @@ export default {
 
   [mutations.POPULAR_DOCUMENTS]: (state: State, { documents }: { documents: Document[] }) => {
     state.popularDocuments = documents;
+  },
+
+  [mutations.STRIPE_PUB_KEY]: (state: State, { key }: { key: string }) => {
+    state.stripePublishableKey = key;
   }
 };

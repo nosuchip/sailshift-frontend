@@ -8,7 +8,7 @@
 
       <v-card-subtitle class="pb-0">{{ document.organization }}</v-card-subtitle>
 
-      <v-card-text class="text--primary text-fade card-text">{{ document.text }}</v-card-text>
+      <v-card-text class="text--primary text-fade card-text" v-html="document.text"></v-card-text>
 
       <v-card-actions v-if="showPurchase">
         <v-btn color="primary" @click="onPurchase">Purchase document</v-btn>

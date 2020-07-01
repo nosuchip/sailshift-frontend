@@ -94,6 +94,7 @@ export default class PurchaseDialog extends Mixins(AsyncOpsControl) {
   prepurchase!: PurchasePrepaymentActionType;
 
   mounted () {
+    // REVIEW: Probably it is not needed, looks like debug code
     this.paymentIntent = {
       "id": "evt_1GkvJDJtdDvmMFZWHlYXqnjE",
       "object": "event",

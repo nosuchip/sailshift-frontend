@@ -16,7 +16,7 @@
             </v-card-title>
 
             <v-card-text>
-              <p :style="{ textAlign: 'justify' }">{{ document ? document.text : "..." }}</p>
+              <p :style="{ textAlign: 'justify' }" v-html="document ? document.text : '...'"></p>
             </v-card-text>
           </v-card>
         </v-col>
@@ -32,7 +32,6 @@
             </v-card-title>
 
             <v-card-actions class="justify-center">
-
               <purchase-dialog
                 v-if="user && user.id"
                 title="Purchase document"
@@ -41,6 +40,14 @@
                 :onPurchase="handlePurchase"
                 :onClose="handleClose"
               />
+
+              <v-btn
+                v-else
+                color="red lighten-1"
+                dark
+                :to="{ name: 'account.login' }"
+              >Please login to purchase</v-btn>
+
             </v-card-actions>
 
             <v-card-subtitle class="pa-2 text-center font-weight-light">
@@ -161,10 +168,10 @@ export default class PreviewDocument extends Vue {
   getMetaInfo (): MetaInfo {
     const doc: Dictionary = this.document || {};
 
-    console.log(">> Rendering page metadata with document", JSON.stringify(doc));
+    const title = this.document ? this.document.title : "Sailshift: Document preview";
 
     return {
-      title: this.document ? this.document.title : "Sailshift: Document preview",
+      title,
       htmlAttrs: {
         lang: "en",
         amp: "true"
@@ -175,10 +182,11 @@ export default class PreviewDocument extends Vue {
         { name: "organization", content: doc.organization || "" },
         { name: "department", content: doc.department || "" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
-        { name: "og:description", content: doc.text ? doc.text.slice(0, 100) : "Sailshift: Document description" },
-        { name: "og:type", content: "document" },
-        { name: "og:url", content: "https://sailshift.com/" },
-        { name: "og:image", content: "https://sailshift.com/static/img/icons/android-chrome-192x192.png" },
+        { property: "og:title", content: title },
+        { property: "og:description", content: doc.text ? doc.text.slice(0, 100) : "Sailshift: Document description" },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: `https://sailshift.com/${this.$route.fullPath}` },
+        { property: "og:image", content: "https://sailshift.com/static/img/icons/android-chrome-512x512.png" },
         { name: "meta-ready", content: doc.title ? "true" : "" }
       ]
     };

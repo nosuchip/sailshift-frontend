@@ -23,4 +23,6 @@ export interface State {
 
   users: User[];
   editUser: User | null;
+
+  stripePublishableKey: string | null;
 }
